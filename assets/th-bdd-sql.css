@@ -1,0 +1,7 @@
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-display:swap;font-weight:100 700;src:url(fonts/ibm-plex-sans-vf.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Sans';font-style:normal;font-display:swap;font-weight:100 700;src:url(fonts/ibm-plex-sans-vf.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/ibm-plex-mono-400.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/ibm-plex-mono-700.woff2) format('woff2')}
+:root{--f-t:'IBM Plex Sans','Bricolage Grotesque',system-ui,sans-serif;--f-x:'IBM Plex Sans',system-ui,sans-serif;--f-c:'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#EDF4F6;--sheet:#FFFFFF;--sheet2:#F4F9FA;--ink:#0B2A33;--ink2:#4C6B75;--ink3:#849BA2;--line:#CFE0E5;--acc:#0E7490;--acc2:#CA8A04;--acc-soft:#E2EEF2;--acc-ink:#FFFFFF;--glow:#24819A44;--code-bg:#0D1A29;--tab:#FAFCFCEE;--blue:#2275B9;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#09121B;--sheet:#111B26;--sheet2:#162330;--ink:#ECEFF5;--ink2:#94A6B8;--ink3:#637281;--line:#223647;--acc:#3E90A6;--acc2:#CA8A04;--acc-soft:#182E3A;--acc-ink:#FFFFFF;--glow:#39839888;--code-bg:#04080C;--tab:#0F1823EE;--blue:#3C89CE;--blue-soft:#172943}

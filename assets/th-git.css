@@ -1,0 +1,8 @@
+@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/space-mono-400.woff2) format('woff2')}
+@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/space-mono-700.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/space-grotesk-vf.woff2) format('woff2')}
+@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/space-mono-400.woff2) format('woff2')}
+@font-face{font-family:'Space Mono';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/space-mono-700.woff2) format('woff2')}
+:root{--f-t:'Space Mono','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Space Grotesk',system-ui,sans-serif;--f-c:'Space Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F7EFEF;--sheet:#FFFFFF;--sheet2:#F4EEF0;--ink:#231B21;--ink2:#5F5762;--ink3:#948C93;--line:#E1D3D3;--acc:#CC5631;--acc2:#2B9A6A;--acc-soft:#F9EBE6;--acc-ink:#FFFFFF;--glow:#D0654444;--code-bg:#201922;--tab:#FDFAFAEE;--blue:#846C94;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#0C0E11;--sheet:#14171C;--sheet2:#1B1F26;--ink:#EDEFF2;--ink2:#9AA3AF;--ink3:#686F78;--line:#262B33;--acc:#FF6B3D;--acc2:#3DDC97;--acc-soft:#3A2421;--acc-ink:#FFFFFF;--glow:#E7623988;--code-bg:#050608;--tab:#121419EE;--blue:#9D769A;--blue-soft:#19263B}

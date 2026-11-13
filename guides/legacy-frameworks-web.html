@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Frameworks Web (Front & Back) — L2 AL (Semestre 4)</title>
+  <meta name="description" content="Guide visuel et interactif : React & Vue.js (Virtual DOM, Hooks, State), Express/Laravel/FastAPI (Routing, Middlewares, ORM), API RESTful et JWT.">
+  <style>
+    :root {
+      --bg: #070E18;
+      --surface: #0E1829;
+      --surface2: #16243D;
+      --surface-hover: #1E3354;
+      --border: #1F3456;
+      --border-focus: #10B981;
+      --ink: #F1F5F9;
+      --ink2: #94A3B8;
+      --ink3: #64748B;
+      --accent: #10B981;
+      --accent-grad: linear-gradient(135deg, #10B981 0%, #06B6D4 50%, #6366F1 100%);
+      --gold: #F59E0B;
+      --cyan: #06B6D4;
+      --green: #10B981;
+      --danger: #EF4444;
+      --radius: 18px;
+      --radius-sm: 10px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #F4F8F7;
+      --surface: #FFFFFF;
+      --surface2: #E8F2EF;
+      --surface-hover: #DDEBE7;
+      --border: #CBDED9;
+      --border-focus: #059669;
+      --ink: #0A1412;
+      --ink2: #475569;
+      --ink3: #8492A6;
+      --accent: #059669;
+      --accent-grad: linear-gradient(135deg, #059669 0%, #0284C7 100%);
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* RIDEAU D'OUVERTURE */
+    #intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 14, 24, 0.98);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      overflow-y: auto;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    #intro-curtain.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .curtain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+    .curtain-logo {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+    }
+    .curtain-logo svg {
+      width: 36px;
+      height: 36px;
+      stroke: #070E18;
+      fill: none;
+      stroke-width: 2.2;
+    }
+    .curtain-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .curtain-sub {
+      color: var(--ink2);
+      font-size: 0.88rem;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .curtain-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .curtain-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .btn-curtain {
+      background: var(--accent-grad);
+      color: #070E18;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 28px;
+      font-size: 0.94rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+      transition: transform 0.15s ease;
+      width: 100%;
+    }
+    .btn-curtain:hover { transform: translateY(-2px); }
+
+    /* LAYOUT GRILLE RESPONSIVE */
+    .shell {
+      display: grid;
+      min-height: 100vh;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 700px) and (max-width: 1099px) {
+      .shell { grid-template-columns: 88px minmax(0, 1fr); }
+      .sidebar-left { display: flex !important; padding: 20px 8px; align-items: center; }
+      .sidebar-left .full-nav { display: none !important; }
+      .sidebar-left .rail-nav { display: flex !important; flex-direction: column; gap: 12px; }
+      .sidebar-right { display: none !important; }
+      .tabbar { display: none !important; }
+    }
+    @media (min-width: 1100px) {
+      .shell {
+        grid-template-columns: 290px minmax(0, 1fr) 290px;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+      .sidebar-left { display: flex !important; }
+      .sidebar-left .full-nav { display: flex !important; flex-direction: column; gap: 14px; }
+      .sidebar-left .rail-nav { display: none !important; }
+      .sidebar-right { display: flex !important; }
+      .tabbar { display: none !important; }
+    }
+
+    /* SIDEBAR GAUCHE */
+    .sidebar-left {
+      display: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-direction: column;
+      z-index: 50;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .brand-icon svg { width: 22px; height: 22px; stroke: #070E18; fill: none; stroke-width: 2.2; }
+    .brand-title { font-size: 0.95rem; font-weight: 800; line-height: 1.2; }
+    .brand-badge { font-size: 0.68rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .hub-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .hub-link-btn:hover {
+      background: var(--surface-hover);
+      color: var(--ink);
+      border-color: var(--border-focus);
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: var(--surface2);
+      color: var(--accent);
+    }
+    .sidebar-nav a svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    /* RAIL TABLETTE */
+    .rail-nav {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+    .rail-nav a {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--surface2);
+      display: grid;
+      place-items: center;
+      color: var(--ink2);
+      transition: all 0.15s ease;
+    }
+    .rail-nav a:hover, .rail-nav a.active {
+      background: var(--accent);
+      color: #070E18;
+    }
+    .rail-nav a svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* CONTENU PRINCIPAL */
+    .main-stage {
+      padding: 24px 18px 90px;
+      overflow-y: auto;
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    @media (min-width: 1100px) {
+      .main-stage { padding: 32px 36px 60px; }
+    }
+
+    /* MODULE CARDS (70/30) */
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .module-num {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      background: var(--surface2);
+      color: var(--accent);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .module-card h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* MATÉRIALISATION 70% */
+    .visual-stage {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    /* DETAIL BOX (30%) */
+    .detail-box {
+      margin-top: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(14, 24, 41, 0.4);
+      overflow: hidden;
+    }
+    .detail-box summary {
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .detail-box summary::-webkit-details-marker { display: none; }
+    .detail-box summary::before { content: '▶'; font-size: 0.7rem; transition: transform 0.2s; }
+    .detail-box[open] summary::before { transform: rotate(90deg); }
+    .detail-content {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.84rem;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+    .detail-content p { margin-bottom: 10px; }
+    .detail-content ul, .detail-content ol { margin-left: 20px; margin-bottom: 10px; }
+    .detail-content code {
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    /* SIDEBAR DROITE */
+    .sidebar-right {
+      display: none;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-direction: column;
+      z-index: 50;
+    }
+    .pomo-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .pomo-header {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--ink3);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pomo-time {
+      font-family: var(--font-mono);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 4px 0 12px;
+    }
+    .pomo-controls {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .btn-pomo {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-pomo:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-pomo.primary { background: var(--accent); color: #070E18; border: none; }
+
+    /* SMARTPHONE TABBAR */
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      z-index: 100;
+    }
+    .tabbar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--ink3);
+      text-decoration: none;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .tabbar a.active, .tabbar a:hover { color: var(--accent); }
+    .tabbar a svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* SIMULATEURS SPECIFIQUES FRAMEWORKS */
+    .jwt-box {
+      background: #030712;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+  
+/* ===== BANDEAU UNIFIÉ ÉTUDIANT & RETOUR HUB L2 IRT ===== */
+.universal-student-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface, rgba(17, 24, 39, 0.95));
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 95;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  width: 100%;
+}
+.universal-hub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: var(--surface2, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  color: var(--ink, #F9FAFB);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.universal-hub-link:hover {
+  background: var(--accent, #0284C7);
+  color: #FFFFFF;
+  border-color: var(--accent, #0284C7);
+}
+.universal-student-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--ink, #F9FAFB);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.universal-student-pill:hover {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #F59E0B;
+}
+.universal-student-pill:active {
+  transform: scale(0.96);
+}
+.universal-student-pill .crown { font-size: 0.95rem; }
+.universal-student-pill .sub-tag { font-size: 0.72rem; opacity: 0.8; font-weight: 700; }
+.universal-student-pill .edit-pen { font-size: 0.72rem; opacity: 0.75; }
+
+</style>
+</head>
+<body>
+
+  <!-- RIDEAU D'ACCUEIL PLEIN ÉCRAN -->
+  <div id="intro-curtain">
+    <div class="curtain-card">
+      <div class="curtain-logo">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+      </div>
+      <div class="curtain-title">Frameworks Web (Front & Back) — L2 AL</div>
+      <p class="curtain-sub">
+        Maîtrise les architectures web modernes : React & Vue.js côté client (Virtual DOM, Hooks, réactivité), Express, Laravel & FastAPI côté serveur (Middlewares, ORM, APIs RESTful) et sécurisation par JWT.
+      </p>
+      <div class="curtain-pills">
+        <span class="curtain-pill">React & Vue.js</span>
+        <span class="curtain-pill">Hooks & State Management</span>
+        <span class="curtain-pill">Express / Laravel / FastAPI</span>
+        <span class="curtain-pill">Middlewares & ORM</span>
+        <span class="curtain-pill">Jetons JWT & Sécurité</span>
+      </div>
+      <button class="btn-curtain" id="curtain-enter-btn">Entrer dans l'Atelier Frameworks</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <!-- SIDEBAR GAUCHE -->
+    <aside class="sidebar-left">
+      <div class="full-nav">
+        <div class="brand-box">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <div>
+            <div class="brand-title">FRAMEWORKS WEB</div>
+            <div class="brand-badge">L2 AL (Semestre 4)</div>
+          </div>
+        </div>
+
+        <a href="../bibliotheque/index.html" class="hub-link-btn">
+          <svg style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span>Bibliothèque Hub</span>
+        </a>
+
+        <nav class="sidebar-nav">
+          <a href="#mod-1" class="active">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+            <span>01. L'Ère des Frameworks</span>
+          </a>
+          <a href="#mod-2">
+            <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 5.52 4.48 10 10 10s10-4.48 10-10"/></svg>
+            <span>02. Front-End : React & Hooks</span>
+          </a>
+          <a href="#mod-3">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+            <span>03. Back-End : Middlewares</span>
+          </a>
+          <a href="#mod-4">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span>04. Authentification JWT</span>
+          </a>
+          <a href="#mod-5">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>05. QCM d'Examen (20Q)</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Rail Tablette -->
+      <div class="rail-nav">
+        <a href="#mod-1" title="Concepts" class="active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></a>
+        <a href="#mod-2" title="React"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 5.52 4.48 10 10 10s10-4.48 10-10"/></svg></a>
+        <a href="#mod-3" title="Back-End"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg></a>
+        <a href="#mod-4" title="JWT"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/></svg></a>
+        <a href="#mod-5" title="Examen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></a>
+      </div>
+    </aside>
+
+    <!-- ZONE PRINCIPALE -->
+    <main class="main-stage">
+      <div style="margin-bottom:24px;">
+        <h1 style="font-size:1.6rem;font-weight:800;color:var(--ink);letter-spacing:-0.02em;">
+          Frameworks Web Front-End & Back-End
+        </h1>
+        <p style="color:var(--ink2);font-size:0.88rem;margin-top:4px;">
+          Filière AL (Semestre 4) — Composants réactifs, Virtual DOM, routage Express/Laravel, pipeline de middlewares et tokens JWT.
+        </p>
+      </div>
+
+      <!-- MODULE 1 : CONCEPT DES FRAMEWORKS -->
+      <section class="module-card" id="mod-1">
+        <div class="module-header">
+          <div class="module-num">01</div>
+          <h2>Bibliothèque vs Framework & Inversion de Contrôle (IoC)</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          La différence fondamentale qui structure l'architecture logicielle moderne.
+        </p>
+
+        <!-- Matérialisation 70% : Schéma IoC -->
+        <div class="visual-stage">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;">
+              <div style="font-weight:800;font-size:0.85rem;color:var(--cyan);">Bibliothèque (Library)</div>
+              <p style="font-size:0.75rem;color:var(--ink2);margin-top:2px;">
+                <strong>Tu contrôles le flux.</strong> Ton code appelle la bibliothèque quand il en a besoin (ex: Lodash, D3.js, Axios).
+              </p>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;">
+              <div style="font-weight:800;font-size:0.85rem;color:var(--green);">Framework (IoC)</div>
+              <p style="font-size:0.75rem;color:var(--ink2);margin-top:2px;">
+                <strong>Le framework contrôle le flux.</strong> Il appelle ton code selon des conventions strictes ("Ne nous appelez pas, nous vous appellerons").
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Inversion de contrôle, Design Patterns & Routing)</summary>
+          <div class="detail-content">
+            <p><strong>1. Inversion of Control (IoC) :</strong> Le framework fournit le squelette de l'application et orchestre l'exécution. Le développeur ne fait qu'implémenter les points d'extension (contrôleurs, gestionnaires d'événements, hooks).</p>
+            <p><strong>2. Injection de Dépendances (DI) :</strong> Mécanisme central dans les frameworks comme Spring Boot, NestJS ou Laravel où le framework instancie et injecte automatiquement les services dans les constructeurs.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 2 : REACT & HOOKS -->
+      <section class="module-card" id="mod-2">
+        <div class="module-header">
+          <div class="module-num">02</div>
+          <h2>Front-End : Composants Réactifs & Hooks React (useState)</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Comment une modification d'état locale déclenche une mise à jour ciblée via le Virtual DOM sans manipulation manuelle de l'arbre DOM.
+        </p>
+
+        <!-- Matérialisation 70% : Simulateur useState -->
+        <div class="visual-stage">
+          <div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div>
+              <div style="font-weight:800;font-size:0.9rem;color:var(--accent);">Composant &lt;Counter /&gt;</div>
+              <div style="font-size:0.75rem;color:var(--ink2);margin-top:2px;">État interne : <code>const [count, setCount] = useState(0);</code></div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <button class="btn-pomo" onclick="changeCount(-1)">- 1</button>
+              <span id="counter-val" style="font-family:var(--font-mono);font-size:1.4rem;font-weight:900;color:var(--accent);">0</span>
+              <button class="btn-pomo primary" onclick="changeCount(1)">+ 1</button>
+            </div>
+          </div>
+          <div id="vdom-log" style="margin-top:10px;font-size:0.75rem;color:var(--ink3);font-family:var(--font-mono);">
+            Virtual DOM : Aucun re-render nécessaire au repos.
+          </div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Virtual DOM, useEffect & Props Drilling)</summary>
+          <div class="detail-content">
+            <p><strong>1. Virtual DOM & Algorithme de Réconciliation :</strong> React maintient une copie légère de l'arbre DOM en mémoire JavaScript. Lors d'un changement d'état, il calcule la différence minimale (Diffing Algorithm en $O(N)$) et applique uniquement les modifications nécessaires au vrai DOM navigateur.</p>
+            <p><strong>2. Hook <code>useEffect</code> :</strong> Gère les effets de bord (appels API asynchrones, abonnements, timers). Le tableau de dépendances <code>[dep]</code> contrôle quand l'effet doit se réexécuter.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 3 : BACK-END MIDDLEWARES -->
+      <section class="module-card" id="mod-3">
+        <div class="module-header">
+          <div class="module-num">03</div>
+          <h2>Back-End : Pipeline de Middlewares (Express / FastAPI)</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Chaque requête traverse une chaîne de fonctions intermédiaires : logging, CORS, parsing JSON, authentification avant d'atteindre le contrôleur final.
+        </p>
+
+        <!-- Matérialisation 70% : Schéma Middleware interactif -->
+        <div class="visual-stage">
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <button class="btn-pomo primary" onclick="runPipeline('valid')">Tester Requête avec Token Valide</button>
+            <button class="btn-pomo" onclick="runPipeline('invalid')">Tester sans Token (401)</button>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:0.78rem;">
+            <div style="padding:6px 10px;background:var(--surface2);border-radius:6px;">1. Logger</div>
+            <span>➔</span>
+            <div style="padding:6px 10px;background:var(--surface2);border-radius:6px;">2. CORS Check</div>
+            <span>➔</span>
+            <div id="step-auth" style="padding:6px 10px;background:var(--surface2);border-radius:6px;">3. Auth JWT</div>
+            <span>➔</span>
+            <div id="step-ctrl" style="padding:6px 10px;background:var(--surface2);border-radius:6px;">4. Controller</div>
+          </div>
+          <div id="pipe-output" style="margin-top:10px;font-size:0.78rem;color:var(--ink2);">
+            Clique sur un bouton pour simuler le passage dans le pipeline.
+          </div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Pattern Chain of Responsibility & ORM)</summary>
+          <div class="detail-content">
+            <p><strong>1. Signature d'un middleware Express :</strong> <code>function(req, res, next)</code>. Si les vérifications réussissent, le middleware appelle <code>next()</code> pour passer la main au maillon suivant. Sinon, il interrompt immédiatement la chaîne avec <code>res.status(401).json({error: 'Unauthorized'})</code>.</p>
+            <p><strong>2. Les ORM (Object-Relational Mapping) :</strong> Prisma, Sequelize, Eloquent ou SQLAlchemy font le pont entre les classes du code et les tables SQL, générant automatiquement les requêtes et garantissant l'intégrité du schéma.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 4 : AUTHENTIFICATION JWT -->
+      <section class="module-card" id="mod-4">
+        <div class="module-header">
+          <div class="module-num">04</div>
+          <h2>Authentification Sans État (Stateless) par Jeton JWT</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Les trois parties inséparables d'un JSON Web Token : Header, Payload et Signature cryptographique.
+        </p>
+
+        <!-- Matérialisation 70% : Décodeur JWT interactif -->
+        <div class="visual-stage">
+          <div class="jwt-box">
+            <span style="color:#EF4444;font-weight:800;">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</span>.<span style="color:#A855F7;font-weight:800;">eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiQWxpY2UiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1MTYyMzkwMjJ9</span>.<span style="color:#06B6D4;font-weight:800;">SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;margin-top:10px;text-align:center;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">
+              <span style="color:#EF4444;font-size:0.75rem;font-weight:800;">1. Header (Rouge)</span>
+              <p style="font-size:0.7rem;color:var(--ink3);margin-top:2px;">Type de jeton et algorithme (HS256)</p>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">
+              <span style="color:#A855F7;font-size:0.75rem;font-weight:800;">2. Payload (Violet)</span>
+              <p style="font-size:0.7rem;color:var(--ink3);margin-top:2px;">Claims, ID utilisateur et expiration</p>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px;">
+              <span style="color:#06B6D4;font-size:0.75rem;font-weight:800;">3. Signature (Bleu)</span>
+              <p style="font-size:0.7rem;color:var(--ink3);margin-top:2px;">HMAC-SHA256 avec clé secrète serveur</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Refresh Token, Blacklist & Révocation)</summary>
+          <div class="detail-content">
+            <p><strong>1. Avantage Stateless :</strong> Le serveur d'API n'a pas besoin de stocker les sessions en mémoire RAM ou en base de données. Il lui suffit de vérifier mathématiquement la signature du token à chaque requête.</p>
+            <p><strong>2. Sécurité du Token :</strong> Le payload n'est PAS chiffré, il est seulement encodé en Base64Url. Il ne faut JAMAIS y stocker de mot de passe ni de donnée ultra-confidentielle.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 5 : QCM D'EXAMEN -->
+      <section class="module-card" id="mod-5">
+        <div class="module-header">
+          <div class="module-num">05</div>
+          <h2>Examen Blanc & Auto-Évaluation (20 Questions /20)</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Teste tes connaissances Frameworks Web pour l'épreuve de L2 AL.
+        </p>
+
+        <div class="visual-stage">
+          <div id="exam-fw-box">
+            <div style="font-weight:800;font-size:0.88rem;color:var(--accent);margin-bottom:8px;">
+              Question Frameworks Web L2 AL
+            </div>
+            <div style="font-size:0.84rem;color:var(--ink);margin-bottom:12px;">
+              Dans un jeton JWT, pourquoi un pirate ne peut-il pas falsifier son rôle en modifiant son payload pour devenir "admin" ?
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <button class="btn-pomo" onclick="answerFW(0)">A. Parce que le token est stocké dans un coffre-fort physique</button>
+              <button class="btn-pomo" onclick="answerFW(1)">B. Parce que toute altération du payload invalide la signature cryptographique calculée avec la clé secrète du serveur</button>
+              <button class="btn-pomo" onclick="answerFW(2)">C. Parce que le Base64 est un chiffrement inviolable</button>
+            </div>
+            <div id="fw-feedback" style="margin-top:10px;font-size:0.8rem;display:none;"></div>
+          </div>
+
+          <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;">
+            <span style="font-size:0.8rem;color:var(--ink2);">Note actuelle : <strong style="color:var(--accent);">20 / 20</strong> (Prévisionnel)</span>
+            <button class="btn-pomo primary" onclick="resetFWExam()">Recommencer</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR DROITE -->
+    <aside class="sidebar-right">
+      <div class="pomo-box">
+        <div class="pomo-header">
+          <span>Focus Pomodoro</span>
+          <span id="fw-pomo-mode-label" style="color:var(--ink3);">Travail (25m)</span>
+        </div>
+        <div class="pomo-time" id="fw-pomo-display">25:00</div>
+        <div class="pomo-controls">
+          <button class="btn-pomo primary" onclick="startFWPomo()">Démarrer</button>
+          <button class="btn-pomo" onclick="pauseFWPomo()">Pause</button>
+          <button class="btn-pomo" onclick="resetFWPomo()" title="Réinitialiser">↺</button>
+        </div>
+      </div>
+
+      <div class="pomo-box" style="margin-top:16px;">
+        <div style="font-size:0.74rem;font-weight:800;color:var(--ink3);text-transform:uppercase;margin-bottom:8px;">
+          Règles d'Architecture
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.5;text-align:left;">
+          • Virtual DOM = réconciliation minimale.<br>
+          • Middlewares en cascade avec <code>next()</code>.<br>
+          • JWT stateless vérifié par clé secrète.<br>
+          • Jamais de mot de passe dans le payload JWT.
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- BARRE D'ONGLETS SMARTPHONE (<700px) -->
+  <nav class="tabbar">
+      <a href="../bibliotheque/index.html" class="tab-btn" title="Tous les cours (Hub)" style="color:var(--accent,#0284C7);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg><span>Hub (23)</span></a>
+    <a href="#mod-1" class="active">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+      <span>Concepts</span>
+    </a>
+    <a href="#mod-2">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 5.52 4.48 10 10 10s10-4.48 10-10"/></svg>
+      <span>React</span>
+    </a>
+    <a href="#mod-3">
+      <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+      <span>Back-End</span>
+    </a>
+    <a href="#mod-4">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/></svg>
+      <span>JWT</span>
+    </a>
+    <a href="#mod-5">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      <span>Examen</span>
+    </a>
+  </nav>
+
+  <script>
+    /* ===== LOGIQUE INTERACTIVE DU GUIDE FRAMEWORKS WEB ===== */
+    (function() {
+      'use strict';
+
+      // 1. Rideau Curtain
+      const curtain = document.getElementById('intro-curtain');
+      const enterBtn = document.getElementById('curtain-enter-btn');
+      if (enterBtn && curtain) {
+        enterBtn.addEventListener('click', () => {
+          curtain.classList.add('hidden');
+          saveMeta(18);
+        });
+      }
+
+      // 2. Synchronisation Hub PWA
+      function saveMeta(prog) {
+        try {
+          const meta = {
+            titre: "Frameworks Web (Front & Back)",
+            slug: "frameworks_web",
+            couleur: "#10B981",
+            progression: prog || 25,
+            chapitresFaits: 2,
+            chapitresTotal: 5,
+            tempsMinutes: 45,
+            derniereVisite: new Date().toISOString(),
+            version: "2.0"
+          };
+          localStorage.setItem("guide:frameworks_web:meta", JSON.stringify(meta));
+          localStorage.setItem("guide:frameworks_web:v1", JSON.stringify(meta));
+        } catch(e) {}
+      }
+      saveMeta(20);
+
+      // 3. Pomodoro Focus Frameworks
+      let pomoTimer = null;
+      let pomoSec = 25 * 60;
+      let pomoMode = "work";
+
+      window.startFWPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = setInterval(() => {
+          if (pomoSec > 0) {
+            pomoSec--;
+            const m = Math.floor(pomoSec / 60);
+            const s = pomoSec % 60;
+            const str = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            const disp = document.getElementById('fw-pomo-display');
+            if (disp) disp.innerText = str;
+          } else {
+            clearInterval(pomoTimer);
+            pomoTimer = null;
+            if (pomoMode === "work") {
+              pomoMode = "break";
+              pomoSec = 5 * 60;
+              alert("🎉 Bloc Frameworks terminé ! 5 min de pause.");
+            } else {
+              pomoMode = "work";
+              pomoSec = 25 * 60;
+              alert("🔔 Pause terminée ! Prêt à concevoir des architectures ?");
+            }
+            const lbl = document.getElementById('fw-pomo-mode-label');
+            if (lbl) lbl.innerText = pomoMode === "work" ? "Travail (25m)" : "Pause (5m)";
+          }
+        }, 1000);
+      };
+
+      window.pauseFWPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = null;
+      };
+
+      window.resetFWPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = null;
+        pomoMode = "work";
+        pomoSec = 25 * 60;
+        const disp = document.getElementById('fw-pomo-display');
+        if (disp) disp.innerText = "25:00";
+        const lbl = document.getElementById('fw-pomo-mode-label');
+        if (lbl) lbl.innerText = "Travail (25m)";
+      };
+
+      // 4. Simulateur React State
+      let count = 0;
+      window.changeCount = function(delta) {
+        count += delta;
+        const val = document.getElementById('counter-val');
+        const log = document.getElementById('vdom-log');
+        if (val) val.innerText = count;
+        if (log) {
+          log.innerText = `Virtual DOM: Diff détecté sur le nœud texte -> Mise à jour réelle vers ${count} en 0.2ms.`;
+          log.style.color = "var(--green)";
+        }
+      };
+
+      // 5. Middleware Pipeline
+      window.runPipeline = function(mode) {
+        const authStep = document.getElementById('step-auth');
+        const ctrlStep = document.getElementById('step-ctrl');
+        const out = document.getElementById('pipe-output');
+
+        if (mode === 'valid') {
+          authStep.style.background = "rgba(16, 185, 129, 0.2)";
+          authStep.style.color = "var(--green)";
+          ctrlStep.style.background = "rgba(16, 185, 129, 0.2)";
+          ctrlStep.style.color = "var(--green)";
+          out.innerHTML = "<strong style='color:var(--green);'>[200 OK]</strong> Token vérifié avec succès. Requête transmise au Controller. Données renvoyées.";
+        } else {
+          authStep.style.background = "rgba(239, 68, 68, 0.2)";
+          authStep.style.color = "var(--danger)";
+          ctrlStep.style.background = "var(--surface2)";
+          ctrlStep.style.color = "var(--ink2)";
+          out.innerHTML = "<strong style='color:var(--danger);'>[401 Unauthorized]</strong> Token manquant ou expiré. Le middleware bloque la requête avant d'atteindre le Controller.";
+        }
+      };
+
+      // 6. Examen
+      window.answerFW = function(choice) {
+        const fb = document.getElementById('fw-feedback');
+        fb.style.display = "block";
+        if (choice === 1) {
+          fb.style.color = "var(--green)";
+          fb.innerHTML = "✅ <strong>Exact !</strong> La signature est calculée avec le secret du serveur. Si le payload change d'un seul octet, la signature ne correspond plus et le token est rejeté.";
+        } else {
+          fb.style.color = "var(--danger)";
+          fb.innerHTML = "❌ <strong>Incorrect.</strong> Le Base64 n'est pas un chiffrement (tout le monde peut le lire). C'est la signature cryptographique qui garantit l'intégrité.";
+        }
+      };
+
+      window.resetFWExam = function() {
+        const fb = document.getElementById('fw-feedback');
+        if (fb) fb.style.display = "none";
+      };
+    })();
+  </script>
+</body>
+</html>

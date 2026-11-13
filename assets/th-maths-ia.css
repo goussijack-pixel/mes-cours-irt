@@ -1,0 +1,6 @@
+@font-face{font-family:'Fraunces';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/fraunces-vf.woff2) format('woff2')}
+@font-face{font-family:'Lexend';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/lexend-vf.woff2) format('woff2')}
+@font-face{font-family:'Fira Code';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/fira-code-vf.woff2) format('woff2')}
+:root{--f-t:'Fraunces','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Lexend',system-ui,sans-serif;--f-c:'Fira Code','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F6EFF6;--sheet:#FFFFFF;--sheet2:#F3EEF6;--ink:#221C2B;--ink2:#5E586E;--ink3:#938D9E;--line:#E0D4E2;--acc:#C35B92;--acc2:#B08619;--acc-soft:#F8EBF2;--acc-ink:#FFFFFF;--glow:#C86A9C44;--code-bg:#1F1A2C;--tab:#FCFAFCEE;--blue:#7968BA;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#0B0710;--sheet:#140D1C;--sheet2:#1D1428;--ink:#FBEFF6;--ink2:#C3A6B8;--ink3:#836E7D;--line:#33223F;--acc:#F472B6;--acc2:#FBBF24;--acc-soft:#381D35;--acc-ink:#FFFFFF;--glow:#DD67A588;--code-bg:#050307;--tab:#110B18EE;--blue:#987AD6;--blue-soft:#191D3B}

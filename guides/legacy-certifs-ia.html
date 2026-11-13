@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tremplin IA, Maths sans Douleur & Certifications Gratuites — L2 AL</title>
+  <meta name="description" content="Guide stratégique pour réussir son stage, combler ses lacunes en maths, obtenir des certifications reconnues mondialement et intégrer un Master en Ingénierie IA.">
+  <style>
+    :root {
+      --bg: #070A14;
+      --surface: #0E1424;
+      --surface2: #162038;
+      --surface-hover: #1F2D4E;
+      --border: #202D4F;
+      --border-focus: #8B5CF6;
+      --ink: #EEF2FF;
+      --ink2: #94A3B8;
+      --ink3: #64748B;
+      --accent: #8B5CF6;
+      --accent-grad: linear-gradient(135deg, #6366F1 0%, #A855F7 50%, #EC4899 100%);
+      --cyan: #06B6D4;
+      --pink: #EC4899;
+      --green: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --radius: 18px;
+      --radius-sm: 10px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #F4F6FC;
+      --surface: #FFFFFF;
+      --surface2: #E9EEF8;
+      --surface-hover: #DFE6F4;
+      --border: #CFDBEC;
+      --border-focus: #7C3AED;
+      --ink: #0A0F1D;
+      --ink2: #475569;
+      --ink3: #8492A6;
+      --accent: #7C3AED;
+      --accent-grad: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #DB2777 100%);
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* RIDEAU D'ACCUEIL AVEC BOUTON HOMOLOGUÉ */
+    #intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 10, 20, 0.98);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      overflow-y: auto;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    #intro-curtain.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .curtain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+    .curtain-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5);
+    }
+    .curtain-logo svg {
+      width: 34px;
+      height: 34px;
+      stroke: #FFFFFF;
+      fill: none;
+      stroke-width: 2;
+    }
+    .curtain-title {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .curtain-sub {
+      font-size: 0.92rem;
+      color: var(--ink2);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .btn-curtain {
+      background: var(--accent-grad);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 0.95rem;
+      padding: 14px 28px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-curtain:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(139, 92, 246, 0.6);
+    }
+
+    /* STRUCTURE SHELL RESPONSIVE 3 COLONNES */
+    .shell {
+      display: grid;
+      min-height: 100vh;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 700px) and (max-width: 1099px) {
+      .shell {
+        grid-template-columns: 88px minmax(0, 1fr);
+      }
+      .sidebar-left { display: flex !important; padding: 20px 8px; align-items: center; }
+      .sidebar-left .full-nav { display: none !important; }
+      .sidebar-left .rail-nav { display: flex !important; flex-direction: column; gap: 12px; }
+      .sidebar-right { display: none !important; }
+      .tabbar { display: none !important; }
+    }
+    @media (min-width: 1100px) {
+      .shell {
+        grid-template-columns: 290px minmax(0, 1fr) 290px;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+      .sidebar-left { display: flex !important; }
+      .sidebar-left .full-nav { display: flex !important; flex-direction: column; gap: 14px; }
+      .sidebar-left .rail-nav { display: none !important; }
+      .sidebar-right { display: flex !important; }
+      .tabbar { display: none !important; }
+    }
+
+    /* SIDEBAR GAUCHE */
+    .sidebar-left {
+      display: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-direction: column;
+      z-index: 50;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .brand-icon svg { width: 22px; height: 22px; stroke: #FFF; fill: none; stroke-width: 2; }
+    .brand-title { font-size: 0.96rem; font-weight: 800; line-height: 1.2; }
+    .brand-badge { font-size: 0.68rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .hub-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .hub-link-btn:hover {
+      background: var(--surface-hover);
+      color: var(--ink);
+      border-color: var(--border-focus);
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: var(--surface2);
+      color: var(--accent);
+    }
+    .sidebar-nav a svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    /* RAIL TABLETTE */
+    .rail-nav {
+      display: none;
+      align-items: center;
+    }
+    .rail-nav a {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--ink2);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .rail-nav a:hover, .rail-nav a.active {
+      background: var(--surface2);
+      color: var(--accent);
+    }
+    .rail-nav a svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* COLONNE CENTRALE */
+    .read {
+      padding: 24px 20px 80px;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* SIDEBAR DROITE */
+    .sidebar-right {
+      display: none;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 50;
+    }
+    .pomo-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .pomo-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .pomo-time {
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-align: center;
+      font-family: var(--font-mono);
+      color: var(--ink);
+      margin: 6px 0 12px;
+    }
+    .pomo-controls {
+      display: flex;
+      gap: 6px;
+    }
+    .btn-pomo {
+      flex: 1;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .btn-pomo.primary {
+      background: var(--accent);
+      color: #FFF;
+      border-color: var(--accent);
+    }
+
+    /* BARRE D'ONGLETS SMARTPHONE */
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    .tabbar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .tabbar a.active {
+      color: var(--accent);
+    }
+    .tabbar a svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* COMPOSANTS DE COURS PREMIUM & RÈGLE 70/30 */
+    .header-hero {
+      background: linear-gradient(135deg, rgba(22, 32, 56, 0.9) 0%, rgba(14, 20, 36, 0.95) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-hero::before {
+      content: "";
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .badge-purple { background: rgba(139, 92, 246, 0.15); color: #C084FC; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: #22D3EE; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: #34D399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+    .header-hero h1 {
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .header-hero p {
+      font-size: 0.92rem;
+      color: var(--ink2);
+      max-width: 680px;
+    }
+
+    /* MODULE CONTAINER */
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .module-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-grad);
+      color: #FFF;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 0.92rem;
+      flex-shrink: 0;
+    }
+    .module-header h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    /* RÈGLE 70/30 : MATÉRIALISATION VISUELLE */
+    .visual-stage {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    /* BOÎTE DÉTAIL DÉPLIABLE (30% THÉORIE REPLIÉE) */
+    details.detail-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-top: 14px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    details.detail-box summary {
+      padding: 12px 16px;
+      font-weight: 700;
+      font-size: 0.86rem;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    details.detail-box summary::-webkit-details-marker { display: none; }
+    details.detail-box summary::after {
+      content: "▶";
+      font-size: 0.72rem;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+    details.detail-box[open] summary::after {
+      transform: rotate(90deg);
+    }
+    .detail-content {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.88rem;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+    .detail-content ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+    .detail-content li {
+      margin-bottom: 6px;
+    }
+
+    /* TABLEAU DE CERTIFICATIONS */
+    .cert-table-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-top: 14px;
+    }
+    table.cert-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      text-align: left;
+    }
+    table.cert-table th {
+      background: var(--surface2);
+      padding: 12px 14px;
+      font-weight: 800;
+      color: var(--ink);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.cert-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink2);
+      vertical-align: middle;
+    }
+    table.cert-table tr:hover td {
+      background: rgba(139, 92, 246, 0.05);
+    }
+    .cert-badge-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #FFF;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.76rem;
+      white-space: nowrap;
+    }
+    .cert-badge-link:hover {
+      filter: brightness(1.15);
+    }
+
+    /* SIMULATEUR DESCENTE DE GRADIENT */
+    .gd-canvas-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
+    .gd-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-act {
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #FFF;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-act.secondary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    /* CODE BOX */
+    .code-box {
+      background: #080C16;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #E2E8F0;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+  
+/* ===== BANDEAU UNIFIÉ ÉTUDIANT & RETOUR HUB L2 IRT ===== */
+.universal-student-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface, rgba(17, 24, 39, 0.95));
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 95;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  width: 100%;
+}
+.universal-hub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: var(--surface2, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  color: var(--ink, #F9FAFB);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.universal-hub-link:hover {
+  background: var(--accent, #0284C7);
+  color: #FFFFFF;
+  border-color: var(--accent, #0284C7);
+}
+.universal-student-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--ink, #F9FAFB);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.universal-student-pill:hover {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #F59E0B;
+}
+.universal-student-pill:active {
+  transform: scale(0.96);
+}
+.universal-student-pill .crown { font-size: 0.95rem; }
+.universal-student-pill .sub-tag { font-size: 0.72rem; opacity: 0.8; font-weight: 700; }
+.universal-student-pill .edit-pen { font-size: 0.72rem; opacity: 0.75; }
+
+</style>
+</head>
+<body>
+
+  <!-- RIDEAU D'ACCUEIL AVEC BOUTON HOMOLOGUÉ -->
+  <div id="intro-curtain">
+    <div class="curtain-card">
+      <div class="curtain-logo">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <h1 class="curtain-title">Tremplin IA & Certifications</h1>
+      <p class="curtain-sub">
+        Votre guide stratégique complet L2 Architecture Logicielle : domptez les maths de l'IA sans douleur, obtenez les meilleures certifications gratuites et décrochez votre stage de rêve.
+      </p>
+      <button class="btn-curtain" id="curtain-enter-btn">Entrer dans l'Atelier IA</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <!-- SIDEBAR GAUCHE -->
+    <aside class="sidebar-left">
+      <div class="full-nav">
+        <div class="brand-box">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div>
+            <div class="brand-badge">Guide Spécial</div>
+            <div class="brand-title">Tremplin IA L2 AL</div>
+          </div>
+        </div>
+
+        <a href="../bibliotheque/index.html" class="hub-link-btn" id="sidebar-hub-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          <span>Bibliothèque Hub</span>
+        </a>
+
+        <nav class="sidebar-nav">
+          <a href="#mod-1" class="active">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+            <span>1. Roadmap IA & Stage</span>
+          </a>
+          <a href="#mod-2">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M9 9h6v6H9z"/></svg>
+            <span>2. Maths IA sans Douleur</span>
+          </a>
+          <a href="#mod-3">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>3. Certifications Gratuites</span>
+          </a>
+          <a href="#mod-4">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>4. Portfolio GitHub Irrésistible</span>
+          </a>
+          <a href="#mod-5">
+            <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7.5" r="4"/></svg>
+            <span>5. CV & Pitch Stage L2</span>
+          </a>
+          <a href="#mod-6">
+            <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+            <span>6. Objectif Master IA</span>
+          </a>
+        </nav>
+
+        <div style="margin-top:auto;padding-top:14px;border-top:1px solid var(--border);">
+          <div style="font-size:0.72rem;font-weight:700;color:var(--ink3);text-transform:uppercase;margin-bottom:6px;">Progression</div>
+          <div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;">
+            <div id="global-progress-bar" style="width:20%;height:100%;background:var(--accent-grad);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RAIL TABLETTE -->
+      <nav class="rail-nav">
+        <a href="#mod-1" class="active" title="Roadmap"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></a>
+        <a href="#mod-2" title="Maths IA"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg></a>
+        <a href="#mod-3" title="Certifications"><svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17"/></svg></a>
+        <a href="#mod-4" title="Portfolio"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16h12V8z"/></svg></a>
+        <a href="#mod-5" title="CV & Stage"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/></svg></a>
+        <a href="#mod-6" title="Master IA"><svg viewBox="0 0 24 24"><path d="M2 10l10-5 10 5-10 5z"/></svg></a>
+      </nav>
+    </aside>
+
+    <!-- COLONNE CENTRALE DE LECTURE -->
+    <main class="read">
+      <header class="header-hero">
+        <div class="hero-badge-row">
+          <span class="badge badge-purple">L2 Architecture Logicielle</span>
+          <span class="badge badge-cyan">Spécialité Ingénierie IA</span>
+          <span class="badge badge-green">100% Hors-Ligne</span>
+        </div>
+        <h1>Tremplin IA, Maths sans Douleur & Certifications Gratuites</h1>
+        <p>
+          Le guide tactique pour transformer vos études en passeport d'admission : comblez vos lacunes en maths grâce à des simulateurs visuels, validez les certifications des géants de la tech (Google, IBM, Harvard, Cisco) et construisez un portfolio qui décroche des offres de stage.
+        </p>
+      </header>
+
+      <!-- MODULE 1 : LA FEUILLE DE ROUTE L2 AL -> STAGE -> MASTER IA -->
+      <section class="module-card" id="mod-1">
+        <div class="module-header">
+          <div class="module-num">01</div>
+          <h2>La Feuille de Route de l'Ingénieur IA (L2 AL → Stage → Master)</h2>
+        </div>
+
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.92rem;color:var(--accent);margin-bottom:12px;">
+            Les 4 Piliers Fondamentaux de votre Parcours
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
+            <div style="background:var(--surface);padding:14px;border-radius:10px;border:1px solid var(--border);">
+              <div style="color:var(--cyan);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Pilier 1</div>
+              <div style="font-weight:700;margin:4px 0;">Code & Architecture</div>
+              <p style="font-size:0.78rem;color:var(--ink2);">Python, C++, Java, Git, POO, structures de données et Docker.</p>
+            </div>
+            <div style="background:var(--surface);padding:14px;border-radius:10px;border:1px solid var(--border);">
+              <div style="color:var(--pink);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Pilier 2</div>
+              <div style="font-weight:700;margin:4px 0;">Maths Visuelles</div>
+              <p style="font-size:0.78rem;color:var(--ink2);">Algèbre linéaire (matrices), dérivées (gradients) et probabilités/stats.</p>
+            </div>
+            <div style="background:var(--surface);padding:14px;border-radius:10px;border:1px solid var(--border);">
+              <div style="color:var(--accent);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Pilier 3</div>
+              <div style="font-weight:700;margin:4px 0;">Certifications</div>
+              <p style="font-size:0.78rem;color:var(--ink2);">Badges officiels Google, IBM, Cisco et Harvard pour crédibiliser le CV.</p>
+            </div>
+            <div style="background:var(--surface);padding:14px;border-radius:10px;border:1px solid var(--border);">
+              <div style="color:var(--green);font-weight:800;font-size:0.8rem;text-transform:uppercase;">Pilier 4</div>
+              <div style="font-weight:700;margin:4px 0;">Projets Concrets</div>
+              <p style="font-size:0.78rem;color:var(--ink2);">Dépôts GitHub documentés, API FastAPI conteneurisées et modèles déployés.</p>
+            </div>
+          </div>
+        </div>
+
+        <details class="detail-box">
+          <summary>Voir le calendrier tactique mois par mois (Semestre 3, Semestre 4, Vacances)</summary>
+          <div class="detail-content">
+            <ul>
+              <li><strong>Novembre - Décembre (S3) :</strong> Consolider l'Algorithmique, le C/Java, Git et Linux. Valider votre 1ère certification gratuite (Google Generative AI Fundamentals).</li>
+              <li><strong>Janvier - Février (S3 Examens) :</strong> Réviser avec les simulateurs interactifs de ce studio. Obtenir la certification IBM AI Foundations sur Credly.</li>
+              <li><strong>Mars - Mai (S4 AL) :</strong> Maîtriser Python, Docker, les bases de données et concevoir vos 2 premiers projets GitHub IA (ex: Chatbot RAG ou Classificateur de données).</li>
+              <li><strong>Juin - Juillet (Stage L2) :</strong> Postuler avec un CV certifié et un profil LinkedIn optimisé. Viser une startup tech ou un laboratoire de développement.</li>
+              <li><strong>Août - Septembre (Prépa L3 & Master) :</strong> Finaliser le dossier pour postuler aux meilleurs Masters spécialisés en Intelligence Artificielle et Science des Données.</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 2 : LES MATHÉMATIQUES DE L'IA DÉMYSTIFIÉES -->
+      <section class="module-card" id="mod-2">
+        <div class="module-header">
+          <div class="module-num">02</div>
+          <h2>Les Mathématiques de l'IA Expliquées Visuellement (Zéro Douleur !)</h2>
+        </div>
+
+        <p style="font-size:0.9rem;color:var(--ink2);margin-bottom:16px;">
+          Vous n'avez pas besoin d'être un théoricien des maths pour faire de l'IA. En réalité, <strong>l'IA ne manipule que 3 concepts intuitifs</strong> : des tableaux de nombres (matrices), une pente qui indique comment corriger une erreur (gradient), et des probabilités pour quantifier l'incertitude.
+        </p>
+
+        <!-- SIMULATEUR 1 : DESCENTE DE GRADIENT -->
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.88rem;color:var(--accent);margin-bottom:8px;">
+            Simulateur Interactif : La Descente de Gradient (Comment l'IA apprend)
+          </div>
+          <p style="font-size:0.8rem;color:var(--ink2);margin-bottom:14px;">
+            Imaginez que vous êtes au sommet d'une colline dans le brouillard. Pour descendre au point le plus bas (l'erreur minimale), vous tâtez la pente avec votre pied et faites un pas dans la direction qui descend. C'est exactement l'algorithme du Gradient Descent !
+          </p>
+
+          <div class="gd-canvas-box">
+            <svg id="gd-svg" width="100%" height="160" viewBox="0 0 400 160" style="background:#080C16;border-radius:10px;border:1px solid var(--border);">
+              <!-- Parabole J(w) = 0.05 * (x - 200)^2 + 30 -->
+              <path d="M 40,150 Q 200,20 360,150" fill="none" stroke="var(--border)" stroke-width="2" stroke-dasharray="4"/>
+              <path d="M 40,150 Q 200,20 360,150" fill="none" stroke="var(--cyan)" stroke-width="3"/>
+              <!-- Point mobile de l'IA -->
+              <circle id="gd-point" cx="80" cy="120" r="8" fill="var(--pink)" stroke="#FFF" stroke-width="2"/>
+              <text x="200" y="150" text-anchor="middle" fill="var(--ink3)" font-size="11">Minimum d'erreur (Objectif w*)</text>
+            </svg>
+
+            <div class="gd-controls">
+              <span style="font-size:0.82rem;font-weight:700;">Position actuelle w : <span id="gd-w-val" style="color:var(--pink);">80</span></span>
+              <span style="font-size:0.82rem;font-weight:700;">Erreur J(w) : <span id="gd-cost-val" style="color:var(--warning);">0.72</span></span>
+              <button class="btn-act" onclick="stepGradientDescent()">Faire 1 Pas d'Apprentissage</button>
+              <button class="btn-act secondary" onclick="resetGradientDescent()">Réinitialiser</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIMULATEUR 2 : PERCEPTRON ARTIFICIEL -->
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.88rem;color:var(--cyan);margin-bottom:8px;">
+            Simulateur Interactif : Le Neurone Artificiel (Perceptron)
+          </div>
+          <p style="font-size:0.8rem;color:var(--ink2);margin-bottom:12px;">
+            Un neurone calcule simplement une somme pondérée : <code>z = w₁·x₁ + w₂·x₂ + b</code>, puis applique une fonction d'activation pour décider si le signal passe ou non.
+          </p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;background:#080C16;padding:16px;border-radius:10px;border:1px solid var(--border);">
+            <div>
+              <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:4px;">Entrée x₁ : <span id="p-x1-val">1.0</span></label>
+              <input type="range" min="0" max="2" step="0.1" value="1.0" style="width:100%;" oninput="updateNeuron()">
+              
+              <label style="font-size:0.78rem;font-weight:700;display:block;margin:10px 0 4px;">Poids w₁ : <span id="p-w1-val">0.8</span></label>
+              <input type="range" min="-2" max="2" step="0.1" value="0.8" style="width:100%;" oninput="updateNeuron()">
+            </div>
+            <div>
+              <label style="font-size:0.78rem;font-weight:700;display:block;margin-bottom:4px;">Biais b : <span id="p-b-val">-0.5</span></label>
+              <input type="range" min="-2" max="2" step="0.1" value="-0.5" style="width:100%;" oninput="updateNeuron()">
+              
+              <div style="margin-top:16px;padding:12px;background:var(--surface2);border-radius:8px;text-align:center;">
+                <div style="font-size:0.72rem;color:var(--ink3);text-transform:uppercase;font-weight:800;">Sortie Activée ŷ</div>
+                <div id="p-out-val" style="font-size:1.6rem;font-weight:900;color:var(--green);">0.57</div>
+                <div style="font-size:0.74rem;color:var(--ink2);">Sigmoïde : σ(z) = 1/(1+e⁻ᶻ)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <details class="detail-box">
+          <summary>Voir la fiche mémo des formules mathématiques essentielles pour l'IA (expliquées simplement)</summary>
+          <div class="detail-content">
+            <p><strong>1. Produit Scalaire & Matrices :</strong> Une image est une matrice de pixels (largeur × hauteur). Multiplier des matrices permet d'extraire des contours, des textures et des caractéristiques clés.</p>
+            <p><strong>2. Dérivée & Gradient (∇) :</strong> La dérivée indique simplement "si j'augmente ce poids un tout petit peu, est-ce que l'erreur augmente ou diminue ?". On ajuste alors le poids dans le sens opposé.</p>
+            <p><strong>3. Probabilités & Softmax :</strong> Quand un modèle prédit un chiffre (0 à 9), la fonction Softmax transforme les scores en pourcentages dont la somme vaut 100% (ex: 94% de chance que ce soit un 7).</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 3 : RÉPERTOIRE DES CERTIFICATIONS GRATUITES ET RECONNUES -->
+      <section class="module-card" id="mod-3">
+        <div class="module-header">
+          <div class="module-num">03</div>
+          <h2>Répertoire Ultime des Certifications Gratuites Reconnues Mondialement</h2>
+        </div>
+
+        <p style="font-size:0.9rem;color:var(--ink2);margin-bottom:14px;">
+          Toutes ces certifications sont <strong>100% gratuites</strong>, délivrées par les plus grandes institutions mondiales (Google, IBM, Harvard, Cisco) et vous offrent des <strong>badges vérifiables sur Credly et LinkedIn</strong> indispensables pour votre recherche de stage.
+        </p>
+
+        <!-- FILTRES DE CERTIFICATIONS -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;">
+          <button class="btn-act" onclick="filterCerts('all')">Toutes (10)</button>
+          <button class="btn-act secondary" onclick="filterCerts('ia')">IA & Machine Learning</button>
+          <button class="btn-act secondary" onclick="filterCerts('dev')">Python & Code</button>
+          <button class="btn-act secondary" onclick="filterCerts('cloud')">Cloud & Systèmes</button>
+        </div>
+
+        <div class="cert-table-wrap">
+          <table class="cert-table" id="cert-table-body">
+            <thead>
+              <tr>
+                <th>Certification</th>
+                <th>Organisme</th>
+                <th>Compétences Clés</th>
+                <th>Durée</th>
+                <th>Badge & Accès</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-cat="ia">
+                <td><strong>Generative AI Fundamentals</strong></td>
+                <td><span class="badge badge-purple">Google Cloud</span></td>
+                <td>LLM, Attention Mechanism, Diffusion Models, Prompting</td>
+                <td>8 heures</td>
+                <td><a href="https://www.cloudskillsboost.google/paths/118" target="_blank" class="cert-badge-link">Obtenir le Badge Google ↗</a></td>
+              </tr>
+              <tr data-cat="ia">
+                <td><strong>AI Foundations with Credly</strong></td>
+                <td><span class="badge badge-cyan">IBM SkillsBuild</span></td>
+                <td>Éthique IA, Réseaux Neuronaux, NLP, Computer Vision</td>
+                <td>10 heures</td>
+                <td><a href="https://skillsbuild.org/students" target="_blank" class="cert-badge-link">Badge Credly IBM ↗</a></td>
+              </tr>
+              <tr data-cat="ia">
+                <td><strong>AI for Everyone (Andrew Ng)</strong></td>
+                <td><span class="badge badge-purple">DeepLearning.AI</span></td>
+                <td>Workflow IA en entreprise, Stratégie Data, Équipes IA</td>
+                <td>6 heures</td>
+                <td><a href="https://www.deeplearning.ai/courses/ai-for-everyone/" target="_blank" class="cert-badge-link">Accès Gratuit ↗</a></td>
+              </tr>
+              <tr data-cat="dev">
+                <td><strong>Python Essentials 1 & 2</strong></td>
+                <td><span class="badge badge-green">Cisco & Python Inst.</span></td>
+                <td>Syntaxe, POO, Modules, Fichiers, Exceptions, Bonnes pratiques</td>
+                <td>30 heures</td>
+                <td><a href="https://www.netacad.com/courses/programming/pcap-programming-essentials-python" target="_blank" class="cert-badge-link">Certificat Cisco ↗</a></td>
+              </tr>
+              <tr data-cat="ia">
+                <td><strong>CS50 AI with Python</strong></td>
+                <td><span class="badge badge-purple">Harvard University</span></td>
+                <td>Minimax, Recherche A*, Probabilités, Réseaux de Neurones</td>
+                <td>7 semaines</td>
+                <td><a href="https://cs50.harvard.edu/ai/" target="_blank" class="cert-badge-link">Cours Harvard Gratuit ↗</a></td>
+              </tr>
+              <tr data-cat="ia">
+                <td><strong>Intro to Machine Learning</strong></td>
+                <td><span class="badge badge-cyan">Kaggle Learn</span></td>
+                <td>Scikit-learn, Random Forests, Validation croisée, MAE</td>
+                <td>3 heures</td>
+                <td><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank" class="cert-badge-link">Certificat Kaggle ↗</a></td>
+              </tr>
+              <tr data-cat="dev">
+                <td><strong>Machine Learning with Python</strong></td>
+                <td><span class="badge badge-green">freeCodeCamp</span></td>
+                <td>TensorFlow, Keras, CNN, RNN, Projets notés par tests</td>
+                <td>300 heures</td>
+                <td><a href="https://www.freecodecamp.org/learn/machine-learning-with-python/" target="_blank" class="cert-badge-link">Certification Projets ↗</a></td>
+              </tr>
+              <tr data-cat="cloud">
+                <td><strong>AWS Cloud Practitioner Essentials</strong></td>
+                <td><span class="badge badge-purple">Amazon AWS</span></td>
+                <td>EC2, S3, IAM, Sécurité Cloud, Architecture scalables</td>
+                <td>6 heures</td>
+                <td><a href="https://aws.amazon.com/fr/training/digital/aws-cloud-practitioner-essentials/" target="_blank" class="cert-badge-link">AWS Skill Builder ↗</a></td>
+              </tr>
+              <tr data-cat="cloud">
+                <td><strong>Introduction to Linux (LFS101x)</strong></td>
+                <td><span class="badge badge-cyan">Linux Foundation</span></td>
+                <td>Bash, Permissions, Fichiers, Administration système</td>
+                <td>14 heures</td>
+                <td><a href="https://training.linuxfoundation.org/training/introduction-to-linux/" target="_blank" class="cert-badge-link">Linux Foundation ↗</a></td>
+              </tr>
+              <tr data-cat="ia">
+                <td><strong>Elements of AI (Certificat Européen)</strong></td>
+                <td><span class="badge badge-green">Univ. d'Helsinki</span></td>
+                <td>Bases théoriques et sociétales de l'IA (2 crédits ECTS)</td>
+                <td>30 heures</td>
+                <td><a href="https://www.elementsofai.com/fr/" target="_blank" class="cert-badge-link">Certificat Officiel ↗</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <details class="detail-box">
+          <summary>L'astuce légale : Comment obtenir 100% de bourse gratuite sur Coursera pour les spécialisations de Stanford ?</summary>
+          <div class="detail-content">
+            <p>Coursera propose l'option <strong>« Aide financière disponible »</strong> (Financial Aid) sur chaque cours, y compris la prestigieuse <em>Machine Learning Specialization</em> d'Andrew Ng (Stanford) :</p>
+            <ol style="margin-left:20px;margin-top:8px;">
+              <li>Cliquez sur le lien <em>« Aide financière disponible »</em> à côté du bouton d'inscription du cours.</li>
+              <li>Remplissez le formulaire en précisant que vous êtes étudiant en L2 Informatique avec des ressources limitées.</li>
+              <li>Expliquez en 150 mots comment ce cours vous aidera à obtenir votre stage et réussir votre projet professionnel.</li>
+              <li>La demande est validée automatiquement sous 15 jours à 100%, vous donnant accès aux devoirs notés et au certificat officiel sans payer un centime !</li>
+            </ol>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 4 : LE PORTFOLIO GITHUB IRRÉSISTIBLE -->
+      <section class="module-card" id="mod-4">
+        <div class="module-header">
+          <div class="module-num">04</div>
+          <h2>Le Guide du Stage L2 & Portfolio GitHub Irrésistible</h2>
+        </div>
+
+        <p style="font-size:0.9rem;color:var(--ink2);margin-bottom:14px;">
+          Un recruteur tech passe en moyenne <strong>30 secondes</strong> sur un CV d'étudiant. S'il clique sur votre lien GitHub et voit un profil soigné avec 2 projets documentés et conteneurisés avec Docker, vous passez directement en haut de la pile !
+        </p>
+
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.88rem;color:var(--accent);margin-bottom:10px;">
+            5 Projets Prêts à Coder en L2 AL pour Impressionner les Recruteurs
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="background:var(--surface);padding:12px 16px;border-radius:10px;border:1px solid var(--border);">
+              <strong style="color:var(--cyan);">Projet 1 : API FastAPI de Classification IA Conteneurisée avec Docker</strong>
+              <p style="font-size:0.8rem;color:var(--ink2);margin-top:4px;">Charge un modèle Scikit-Learn ou PyTorch pré-entraîné, expose un endpoint REST <code>/predict</code> avec Swagger automatique, et se lance en 1 ligne : <code>docker run -p 8000:8000 mon-ia</code>.</p>
+            </div>
+            <div style="background:var(--surface);padding:12px 16px;border-radius:10px;border:1px solid var(--border);">
+              <strong style="color:var(--pink);">Projet 2 : Système de Recommandation Intelligent en Python</strong>
+              <p style="font-size:0.8rem;color:var(--ink2);margin-top:4px;">Filtrage collaboratif et similarité cosinus (maths appliquées !) sur des films ou articles avec interface web interactive Streamlit.</p>
+            </div>
+            <div style="background:var(--surface);padding:12px 16px;border-radius:10px;border:1px solid var(--border);">
+              <strong style="color:var(--green);">Projet 3 : Bot RAG (Retrieval Augmented Generation) sur Documents PDF</strong>
+              <p style="font-size:0.8rem;color:var(--ink2);margin-top:4px;">Permet d'interroger un cours ou un rapport PDF en langage naturel grâce à des embeddings vectoriels (ChromaDB + Ollama ou API OpenAI).</p>
+            </div>
+          </div>
+        </div>
+
+        <details class="detail-box">
+          <summary>Voir le template parfait de README.md GitHub pour vos dépôts</summary>
+          <div class="detail-content">
+            <div class="code-box"># 🚀 Mon Projet IA — Détection & Prédiction
+
+[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://python.org)
+[![Docker](https://img.shields.io/badge/Docker-Ready-cyan.svg)](https://docker.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+## 📌 Description
+Ce projet implémente un pipeline complet d'apprentissage automatique avec FastAPI et Docker.
+
+## 🛠️ Stack Technique
+- **Langages :** Python, SQL, C++
+- **Frameworks :** Scikit-Learn, FastAPI, NumPy, Pandas
+- **DevOps :** Docker, GitHub Actions CI/CD
+
+## ⚡ Démarrage Rapide (1 commande)
+```bash
+docker compose up --build
+```
+Ouvrez ensuite http://localhost:8000/docs pour tester les prédictions en direct !</div>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 5 : CV & PITCH RECRUTEUR -->
+      <section class="module-card" id="mod-5">
+        <div class="module-header">
+          <div class="module-num">05</div>
+          <h2>Modèle de CV Étudiant L2 AL & Pitch Recruteur</h2>
+        </div>
+
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.88rem;color:var(--green);margin-bottom:8px;">
+            Message type LinkedIn pour contacter un Responsable Tech ou Tuteur de Stage
+          </div>
+          <div class="code-box" style="white-space:pre-wrap;">Bonjour [Nom du Recruteur / Tech Lead],
+
+Étudiant en 2e année d'ingénierie informatique (spécialité Architecture Logicielle) à l'ESGIS, je me passionne pour le déploiement de modèles de machine learning et l'architecture backend.
+
+J'ai récemment validé les certifications [Ex: Google Generative AI & Cisco Python] et développé une API conteneurisée avec Docker disponible sur mon GitHub : [Lien GitHub].
+
+Je recherche un stage de [X mois] à partir de [Mois]. Seriez-vous ouvert à un échange de 10 minutes pour discuter des défis techniques de votre équipe ?
+
+Bien cordialement,
+[Votre Prénom Nom] · [Téléphone] · [Lien LinkedIn]</div>
+        </div>
+      </section>
+
+      <!-- MODULE 6 : OBJECTIF MASTER IA -->
+      <section class="module-card" id="mod-6">
+        <div class="module-header">
+          <div class="module-num">06</div>
+          <h2>Objectif Master Ingénierie IA : Comment Réussir votre Candidature</h2>
+        </div>
+
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.88rem;color:var(--accent);margin-bottom:10px;">
+            La Formule Gagnante pour les Commissions d'Admission
+          </div>
+          <p style="font-size:0.84rem;color:var(--ink2);line-height:1.6;">
+            Les commissions de Master en IA savent que beaucoup d'étudiants ont des notes moyennes en maths théoriques. Pour vous démarquer et être admis d'office, votre dossier doit faire briller :
+          </p>
+          <ul style="margin-left:20px;font-size:0.82rem;color:var(--ink2);margin-top:8px;">
+            <li><strong>L'excellence pratique en programmation :</strong> Un niveau solide en Python, C++ et POO prouvé par des projets GitHub propres.</li>
+            <li><strong>La curiosité certifiée :</strong> Vos badges Credly/Coursera qui démontrent que vous apprenez par vous-même au-delà du programme scolaire.</li>
+            <li><strong>Une expérience de stage concrète :</strong> Un stage L2 où vous avez automatisé un processus ou manipulé des données en entreprise.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR DROITE -->
+    <aside class="sidebar-right">
+      <div class="pomo-box">
+        <div class="pomo-header">
+          <span>Focus Pomodoro</span>
+          <span id="ia-pomo-mode-label" style="color:var(--ink3);">Travail (25m)</span>
+        </div>
+        <div class="pomo-time" id="ia-pomo-display">25:00</div>
+        <div class="pomo-controls">
+          <button class="btn-pomo primary" onclick="startIaPomo()">Démarrer</button>
+          <button class="btn-pomo" onclick="pauseIaPomo()">Pause</button>
+          <button class="btn-pomo" onclick="resetIaPomo()" title="Réinitialiser">↺</button>
+        </div>
+      </div>
+
+      <div class="pomo-box" style="margin-top:16px;">
+        <div style="font-size:0.74rem;font-weight:800;color:var(--ink3);text-transform:uppercase;margin-bottom:8px;">
+          Sur cette page
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.5;">
+          Guide tactique de l'étudiant L2 AL : Roadmap, Maths visuelles, Certifications gratuites, Portfolio et Master IA.
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- BARRE D'ONGLETS SMARTPHONE (<700px) -->
+  <nav class="tabbar">
+      <a href="../bibliotheque/index.html" class="tab-btn" title="Tous les cours (Hub)" style="color:var(--accent,#0284C7);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg><span>Hub (23)</span></a>
+    <a href="#mod-1" class="active">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+      <span>Roadmap</span>
+    </a>
+    <a href="#mod-2">
+      <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/></svg>
+      <span>Maths</span>
+    </a>
+    <a href="#mod-3">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15 9 22 9 17 14"/></svg>
+      <span>Certifs</span>
+    </a>
+    <a href="#mod-4">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16h12V8z"/></svg>
+      <span>Portfolio</span>
+    </a>
+    <a href="#mod-5">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"/></svg>
+      <span>Stage</span>
+    </a>
+  </nav>
+
+  <script>
+    /* ===== LOGIQUE INTERACTIVE DU GUIDE TREMPLIN IA ===== */
+    (function() {
+      'use strict';
+
+      // 1. Gestion du rideau d'ouverture (Curtain)
+      const curtain = document.getElementById('intro-curtain');
+      const enterBtn = document.getElementById('curtain-enter-btn');
+      if (enterBtn && curtain) {
+        enterBtn.addEventListener('click', () => {
+          curtain.classList.add('hidden');
+          saveMeta(15);
+        });
+      }
+
+      // 2. Synchronisation Hub PWA
+      function saveMeta(prog) {
+        try {
+          const meta = {
+            titre: "Tremplin IA & Certifications",
+            slug: "tremplin_ia",
+            couleur: "#8B5CF6",
+            progression: prog || 25,
+            chapitresFaits: 2,
+            chapitresTotal: 6,
+            tempsMinutes: 45,
+            derniereVisite: new Date().toISOString(),
+            version: "2.0"
+          };
+          localStorage.setItem("guide:tremplin_ia:meta", JSON.stringify(meta));
+          localStorage.setItem("guide:tremplin_ia:v1", JSON.stringify(meta));
+        } catch(e) {}
+      }
+      saveMeta(20);
+
+      // 3. Minuteur Pomodoro Focus
+      let pomoTimer = null;
+      let pomoSec = 25 * 60;
+      let pomoMode = "work";
+
+      window.startIaPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = setInterval(() => {
+          if (pomoSec > 0) {
+            pomoSec--;
+            const m = Math.floor(pomoSec / 60);
+            const s = pomoSec % 60;
+            const str = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            const disp = document.getElementById('ia-pomo-display');
+            if (disp) disp.innerText = str;
+          } else {
+            clearInterval(pomoTimer);
+            pomoTimer = null;
+            if (pomoMode === "work") {
+              pomoMode = "break";
+              pomoSec = 5 * 60;
+              alert("🎉 Session de travail terminée ! Prenez 5 minutes de pause bien méritée.");
+            } else {
+              pomoMode = "work";
+              pomoSec = 25 * 60;
+              alert("🔔 Pause terminée ! Prêt pour un nouveau bloc de concentration ?");
+            }
+            const lbl = document.getElementById('ia-pomo-mode-label');
+            if (lbl) lbl.innerText = pomoMode === "work" ? "Travail (25m)" : "Pause (5m)";
+          }
+        }, 1000);
+      };
+
+      window.pauseIaPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = null;
+      };
+
+      window.resetIaPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = null;
+        pomoMode = "work";
+        pomoSec = 25 * 60;
+        const disp = document.getElementById('ia-pomo-display');
+        if (disp) disp.innerText = "25:00";
+        const lbl = document.getElementById('ia-pomo-mode-label');
+        if (lbl) lbl.innerText = "Travail (25m)";
+      };
+
+      // 4. Simulateur Descente de Gradient
+      let currentW = 80;
+      const targetW = 200;
+      const lr = 0.35;
+
+      window.stepGradientDescent = function() {
+        const diff = targetW - currentW;
+        currentW += diff * lr;
+        updateGdVisual();
+      };
+
+      window.resetGradientDescent = function() {
+        currentW = 80;
+        updateGdVisual();
+      };
+
+      function updateGdVisual() {
+        const pt = document.getElementById('gd-point');
+        const wVal = document.getElementById('gd-w-val');
+        const costVal = document.getElementById('gd-cost-val');
+
+        // Y calculé le long de la parabole
+        const normX = (currentW - 200) / 160;
+        const y = 30 + 100 * (normX * normX);
+
+        if (pt) {
+          pt.setAttribute('cx', currentW);
+          pt.setAttribute('cy', y);
+        }
+        if (wVal) wVal.innerText = Math.round(currentW);
+        if (costVal) costVal.innerText = (normX * normX).toFixed(2);
+      }
+
+      // 5. Simulateur Neurone Perceptron
+      window.updateNeuron = function() {
+        const x1Input = document.querySelectorAll('input[type=range]')[0];
+        const w1Input = document.querySelectorAll('input[type=range]')[1];
+        const bInput = document.querySelectorAll('input[type=range]')[2];
+
+        const x1 = parseFloat(x1Input ? x1Input.value : 1.0);
+        const w1 = parseFloat(w1Input ? w1Input.value : 0.8);
+        const b = parseFloat(bInput ? bInput.value : -0.5);
+
+        const x1Disp = document.getElementById('p-x1-val');
+        const w1Disp = document.getElementById('p-w1-val');
+        const bDisp = document.getElementById('p-b-val');
+        const outDisp = document.getElementById('p-out-val');
+
+        if (x1Disp) x1Disp.innerText = x1.toFixed(1);
+        if (w1Disp) w1Disp.innerText = w1.toFixed(1);
+        if (bDisp) bDisp.innerText = b.toFixed(1);
+
+        const z = (w1 * x1) + b;
+        const sig = 1 / (1 + Math.exp(-z));
+        if (outDisp) outDisp.innerText = sig.toFixed(2);
+      };
+
+      // 6. Filtrage des certifications
+      window.filterCerts = function(cat) {
+        const rows = document.querySelectorAll('#cert-table-body tbody tr');
+        rows.forEach(r => {
+          if (cat === 'all' || r.dataset.cat === cat) {
+            r.style.display = '';
+          } else {
+            r.style.display = 'none';
+          }
+        });
+      };
+    })();
+  </script>
+</body>
+</html>

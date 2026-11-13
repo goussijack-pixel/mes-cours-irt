@@ -1,0 +1,5 @@
+@font-face{font-family:'Unbounded';font-style:normal;font-display:swap;font-weight:200 900;src:url(fonts/unbounded-vf.woff2) format('woff2')}
+@font-face{font-family:'Outfit';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/outfit-vf.woff2) format('woff2')}
+:root{--f-t:'Unbounded','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Outfit',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F0EEFA;--sheet:#FFFFFF;--sheet2:#EEEDF9;--ink:#1A1A30;--ink2:#535674;--ink3:#8A8BA3;--line:#D3D1EA;--acc:#8B5CF6;--acc2:#1894A7;--acc-soft:#F1EBFE;--acc-ink:#FFFFFF;--glow:#956BF644;--code-bg:#171831;--tab:#FAFAFEEE;--blue:#5964DD;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#07061A;--sheet:#0F0D2A;--sheet2:#17143A;--ink:#F1EEFF;--ink2:#A9A2D6;--ink3:#706B94;--line:#272250;--acc:#8B5CF6;--acc2:#22D3EE;--acc-soft:#231A4B;--acc-ink:#FFFFFF;--glow:#7E53E088;--code-bg:#03030C;--tab:#0D0B25EE;--blue:#636FF6;--blue-soft:#151D47}

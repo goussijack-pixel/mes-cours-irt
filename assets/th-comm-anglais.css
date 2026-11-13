@@ -1,0 +1,5 @@
+@font-face{font-family:'Playfair Display';font-style:normal;font-display:swap;font-weight:400 900;src:url(fonts/playfair-display-vf.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-style:normal;font-display:swap;font-weight:200 1000;src:url(fonts/nunito-vf.woff2) format('woff2')}
+:root{--f-t:'Playfair Display','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Nunito',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F4EFE7;--sheet:#FFFFFF;--sheet2:#FAF7F2;--ink:#1A1A1A;--ink2:#5C5650;--ink3:#918C85;--line:#E2DACE;--acc:#0E7490;--acc2:#C2410C;--acc-soft:#E2EEF2;--acc-ink:#FFFFFF;--glow:#25809944;--code-bg:#0D1A29;--tab:#FCFAF8EE;--blue:#2275B9;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#09121B;--sheet:#111B26;--sheet2:#162330;--ink:#ECEFF5;--ink2:#94A6B8;--ink3:#637281;--line:#223647;--acc:#3E90A6;--acc2:#C54A18;--acc-soft:#182E3A;--acc-ink:#FFFFFF;--glow:#39839888;--code-bg:#04080C;--tab:#0F1823EE;--blue:#3C89CE;--blue-soft:#172943}

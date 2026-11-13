@@ -1,0 +1,4 @@
+@font-face{font-family:'Unbounded';font-style:normal;font-display:swap;font-weight:200 900;src:url(fonts/unbounded-vf.woff2) format('woff2')}
+:root{--f-t:'Unbounded','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Figtree',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#EFEEFA;--sheet:#FFFFFF;--sheet2:#EDEDF9;--ink:#191A31;--ink2:#525675;--ink3:#898BA4;--line:#D1D1EB;--acc:#7C5CFF;--acc2:#1894A7;--acc-soft:#EFEBFF;--acc-ink:#FFFFFF;--glow:#886BFE44;--code-bg:#161832;--tab:#FAFAFEEE;--blue:#5769EE;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#070A12;--sheet:#0E1322;--sheet2:#151C30;--ink:#EEF2FF;--ink2:#9AA6C4;--ink3:#676F86;--line:#222C45;--acc:#7C5CFF;--acc2:#22D3EE;--acc-soft:#201F45;--acc-ink:#FFFFFF;--glow:#7054E788;--code-bg:#030408;--tab:#0C101DEE;--blue:#5C6FFA;--blue-soft:#142340}

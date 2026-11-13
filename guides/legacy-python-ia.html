@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Python & Tremplin IA — L2 AL (Semestre 4)</title>
+  <meta name="description" content="Guide visuel et interactif : Python moderne, POO & Dataclasses, NumPy vectorisé sans douleur, DataFrames Pandas, pipeline Machine Learning et typage Pydantic.">
+  <style>
+    :root {
+      --bg: #070C16;
+      --surface: #0E1627;
+      --surface2: #16223C;
+      --surface-hover: #1E2F52;
+      --border: #203154;
+      --border-focus: #38BDF8;
+      --ink: #F8FAFC;
+      --ink2: #94A3B8;
+      --ink3: #64748B;
+      --accent: #38BDF8;
+      --accent-grad: linear-gradient(135deg, #38BDF8 0%, #3B82F6 50%, #F59E0B 100%);
+      --gold: #F59E0B;
+      --cyan: #38BDF8;
+      --green: #10B981;
+      --danger: #EF4444;
+      --radius: 18px;
+      --radius-sm: 10px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface2: #EEF4FB;
+      --surface-hover: #E1ECF8;
+      --border: #CBDDF2;
+      --border-focus: #0284C7;
+      --ink: #0C192C;
+      --ink2: #475569;
+      --ink3: #64748B;
+      --accent: #0284C7;
+      --accent-grad: linear-gradient(135deg, #0284C7 0%, #2563EB 100%);
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-main);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* RIDEAU D'OUVERTURE */
+    #intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 12, 22, 0.98);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      overflow-y: auto;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    #intro-curtain.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .curtain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px 28px;
+      max-width: 540px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    }
+    .curtain-logo {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+    }
+    .curtain-logo svg {
+      width: 36px;
+      height: 36px;
+      stroke: #070C16;
+      fill: none;
+      stroke-width: 2.2;
+    }
+    .curtain-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .curtain-sub {
+      color: var(--ink2);
+      font-size: 0.88rem;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+    .curtain-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .curtain-pill {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .btn-curtain {
+      background: var(--accent-grad);
+      color: #070C16;
+      border: none;
+      border-radius: 14px;
+      padding: 13px 28px;
+      font-size: 0.94rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(56, 189, 248, 0.3);
+      transition: transform 0.15s ease;
+      width: 100%;
+    }
+    .btn-curtain:hover { transform: translateY(-2px); }
+
+    /* LAYOUT GRILLE RESPONSIVE */
+    .shell {
+      display: grid;
+      min-height: 100vh;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 700px) and (max-width: 1099px) {
+      .shell { grid-template-columns: 88px minmax(0, 1fr); }
+      .sidebar-left { display: flex !important; padding: 20px 8px; align-items: center; }
+      .sidebar-left .full-nav { display: none !important; }
+      .sidebar-left .rail-nav { display: flex !important; flex-direction: column; gap: 12px; }
+      .sidebar-right { display: none !important; }
+      .tabbar { display: none !important; }
+    }
+    @media (min-width: 1100px) {
+      .shell {
+        grid-template-columns: 290px minmax(0, 1fr) 290px;
+        max-width: 1600px;
+        margin: 0 auto;
+      }
+      .sidebar-left { display: flex !important; }
+      .sidebar-left .full-nav { display: flex !important; flex-direction: column; gap: 14px; }
+      .sidebar-left .rail-nav { display: none !important; }
+      .sidebar-right { display: flex !important; }
+      .tabbar { display: none !important; }
+    }
+
+    /* SIDEBAR GAUCHE */
+    .sidebar-left {
+      display: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-direction: column;
+      z-index: 50;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .brand-icon svg { width: 22px; height: 22px; stroke: #070C16; fill: none; stroke-width: 2.2; }
+    .brand-title { font-size: 0.95rem; font-weight: 800; line-height: 1.2; }
+    .brand-badge { font-size: 0.68rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .hub-link-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+    }
+    .hub-link-btn:hover {
+      background: var(--surface-hover);
+      color: var(--ink);
+      border-color: var(--border-focus);
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: var(--surface2);
+      color: var(--accent);
+    }
+    .sidebar-nav a svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; flex-shrink: 0; }
+
+    /* RAIL TABLETTE */
+    .rail-nav {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+    .rail-nav a {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--surface2);
+      display: grid;
+      place-items: center;
+      color: var(--ink2);
+      transition: all 0.15s ease;
+    }
+    .rail-nav a:hover, .rail-nav a.active {
+      background: var(--accent);
+      color: #070C16;
+    }
+    .rail-nav a svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* CONTENU PRINCIPAL */
+    .main-stage {
+      padding: 24px 18px 90px;
+      overflow-y: auto;
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    @media (min-width: 1100px) {
+      .main-stage { padding: 32px 36px 60px; }
+    }
+
+    /* MODULE CARDS (70/30) */
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .module-num {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      background: var(--surface2);
+      color: var(--accent);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .module-card h2 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* MATÉRIALISATION 70% */
+    .visual-stage {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    /* DETAIL BOX (THEORIE REPLIEE 30%) */
+    .detail-box {
+      margin-top: 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(14, 22, 39, 0.4);
+      overflow: hidden;
+    }
+    .detail-box summary {
+      padding: 12px 14px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent);
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .detail-box summary::-webkit-details-marker { display: none; }
+    .detail-box summary::before { content: '▶'; font-size: 0.7rem; transition: transform 0.2s; }
+    .detail-box[open] summary::before { transform: rotate(90deg); }
+    .detail-content {
+      padding: 14px 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.84rem;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+    .detail-content p { margin-bottom: 10px; }
+    .detail-content ul, .detail-content ol { margin-left: 20px; margin-bottom: 10px; }
+    .detail-content code {
+      background: var(--surface);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    /* SIDEBAR DROITE */
+    .sidebar-right {
+      display: none;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      flex-direction: column;
+      z-index: 50;
+    }
+    .pomo-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .pomo-header {
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--ink3);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .pomo-time {
+      font-family: var(--font-mono);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin: 4px 0 12px;
+    }
+    .pomo-controls {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .btn-pomo {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-pomo:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-pomo.primary { background: var(--accent); color: #070C16; border: none; }
+
+    /* SMARTPHONE TABBAR */
+    .tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      z-index: 100;
+    }
+    .tabbar a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--ink3);
+      text-decoration: none;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+    .tabbar a.active, .tabbar a:hover { color: var(--accent); }
+    .tabbar a svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* SIMULATEURS SPECIFIQUES PYTHON & IA */
+    .code-terminal {
+      background: #030712;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #93C5FD;
+      white-space: pre-wrap;
+    }
+    .bench-bar {
+      height: 16px;
+      border-radius: 8px;
+      transition: width 0.4s ease;
+    }
+  
+/* ===== BANDEAU UNIFIÉ ÉTUDIANT & RETOUR HUB L2 IRT ===== */
+.universal-student-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface, rgba(17, 24, 39, 0.95));
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 95;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  width: 100%;
+}
+.universal-hub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: var(--surface2, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  color: var(--ink, #F9FAFB);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.universal-hub-link:hover {
+  background: var(--accent, #0284C7);
+  color: #FFFFFF;
+  border-color: var(--accent, #0284C7);
+}
+.universal-student-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--ink, #F9FAFB);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.universal-student-pill:hover {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #F59E0B;
+}
+.universal-student-pill:active {
+  transform: scale(0.96);
+}
+.universal-student-pill .crown { font-size: 0.95rem; }
+.universal-student-pill .sub-tag { font-size: 0.72rem; opacity: 0.8; font-weight: 700; }
+.universal-student-pill .edit-pen { font-size: 0.72rem; opacity: 0.75; }
+
+</style>
+</head>
+<body>
+
+  <!-- RIDEAU D'ACCUEIL PLEIN ÉCRAN -->
+  <div id="intro-curtain">
+    <div class="curtain-card">
+      <div class="curtain-logo">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-10 10c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+      </div>
+      <div class="curtain-title">Python pour l'IA & Architecture — L2 AL</div>
+      <p class="curtain-sub">
+        Dompte Python 3 moderne, les list/dict comprehensions, le calcul vectoriel NumPy sans boucle for, la manipulation de DataFrames Pandas et l'entraînement de modèles IA.
+      </p>
+      <div class="curtain-pills">
+        <span class="curtain-pill">Comprehensions & POO</span>
+        <span class="curtain-pill">NumPy Vectorisé (50x plus rapide)</span>
+        <span class="curtain-pill">Pandas DataFrames</span>
+        <span class="curtain-pill">Pipeline Scikit-Learn</span>
+        <span class="curtain-pill">Architecture & Typage</span>
+      </div>
+      <button class="btn-curtain" id="curtain-enter-btn">Lancer l'Environnement Python IA</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <!-- SIDEBAR GAUCHE -->
+    <aside class="sidebar-left">
+      <div class="full-nav">
+        <div class="brand-box">
+          <div class="brand-icon">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <div>
+            <div class="brand-title">PYTHON & IA</div>
+            <div class="brand-badge">L2 AL (Semestre 4)</div>
+          </div>
+        </div>
+
+        <a href="../bibliotheque/index.html" class="hub-link-btn">
+          <svg style="width:16px;height:16px;" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          <span>Bibliothèque Hub</span>
+        </a>
+
+        <nav class="sidebar-nav">
+          <a href="#mod-1" class="active">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+            <span>01. Structures & Idiosyncrasies</span>
+          </a>
+          <a href="#mod-2">
+            <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
+            <span>02. Benchmark NumPy Vectorisé</span>
+          </a>
+          <a href="#mod-3">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <span>03. DataFrames Pandas</span>
+          </a>
+          <a href="#mod-4">
+            <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            <span>04. Pipeline Machine Learning</span>
+          </a>
+          <a href="#mod-5">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+            <span>05. POO & Typage Robuste</span>
+          </a>
+          <a href="#mod-6">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <span>06. QCM d'Examen (20Q)</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Rail Tablette -->
+      <div class="rail-nav">
+        <a href="#mod-1" title="Syntaxe" class="active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></a>
+        <a href="#mod-2" title="NumPy"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg></a>
+        <a href="#mod-3" title="Pandas"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></a>
+        <a href="#mod-4" title="ML Pipeline"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></a>
+        <a href="#mod-5" title="POO"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg></a>
+        <a href="#mod-6" title="Examen"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></a>
+      </div>
+    </aside>
+
+    <!-- ZONE PRINCIPALE -->
+    <main class="main-stage">
+      <div style="margin-bottom:24px;">
+        <h1 style="font-size:1.6rem;font-weight:800;color:var(--ink);letter-spacing:-0.02em;">
+          Python pour l'Architecture Logicielle & l'IA
+        </h1>
+        <p style="color:var(--ink2);font-size:0.88rem;margin-top:4px;">
+          Filière AL (Semestre 4) — Le langage roi de l'IA moderne, de la data science à l'ingénierie des modèles prédictifs.
+        </p>
+      </div>
+
+      <!-- MODULE 1 : SYNTAXE MODERNE & COMPREHENSIONS -->
+      <section class="module-card" id="mod-1">
+        <div class="module-header">
+          <div class="module-num">01</div>
+          <h2>Le Python Idiomatique : List & Dict Comprehensions</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Remplacer 5 lignes de boucles <code>for</code> imbriquées par une expression déclarative concise et rapide.
+        </p>
+
+        <!-- Matérialisation 70% : Démo interactive de List Comprehension -->
+        <div class="visual-stage">
+          <div style="font-size:0.84rem;font-weight:800;color:var(--accent);margin-bottom:8px;">
+            Simulateur d'Évaluation de List Comprehension :
+          </div>
+
+          <div class="code-terminal"># Filtrer et élever au carré les pairs de 0 à 9 :
+evens_squared = [x**2 for x in range(10) if x % 2 == 0]</div>
+
+          <div style="margin-top:10px;display:flex;gap:6px;align-items:center;">
+            <button class="btn-pomo primary" onclick="runCompDemo()">Évaluer l'Expression</button>
+            <span style="font-size:0.8rem;color:var(--ink3);">Résultat obtenu :</span>
+          </div>
+
+          <div id="comp-result" class="code-terminal" style="margin-top:8px;color:#34D399;font-weight:700;">
+            [0, 4, 16, 36, 64]
+          </div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Générateurs, zip, enumerate & unpacking *args)</summary>
+          <div class="detail-content">
+            <p><strong>1. Générateurs vs Listes :</strong> <code>(x**2 for x in range(1_000_000))</code> ne charge pas 1 million d'éléments en RAM. Il utilise l'évaluation paresseuse (lazy evaluation) avec le protocole itérateur <code>yield</code>.</p>
+            <p><strong>2. Déballage d'itérables (Unpacking) :</strong> <code>first, *middle, last = [1, 2, 3, 4, 5]</code> affecte <code>first=1</code>, <code>middle=[2, 3, 4]</code> et <code>last=5</code>.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 2 : BENCHMARK NUMPY VECTORISE -->
+      <section class="module-card" id="mod-2">
+        <div class="module-header">
+          <div class="module-num">02</div>
+          <h2>NumPy sans Douleur : Le Calcul Vectorisé vs Boucle For</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Pourquoi l'IA utilise NumPy : les opérations sont déléguées à des bibliothèques C/BLAS ultra-optimisées avec SIMD.
+        </p>
+
+        <!-- Matérialisation 70% : Benchmark live Boucle vs NumPy -->
+        <div class="visual-stage">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <div style="font-size:0.85rem;font-weight:800;color:var(--ink);">Calcul sur 1 000 000 d'éléments : $y = 2 \cdot x + 1$</div>
+            <button class="btn-pomo primary" onclick="runBench()">Lancer le Benchmark</button>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:3px;">
+                <span>Boucle Python pure (for x in lst)</span>
+                <span id="bench-py-time" style="color:var(--danger);font-weight:800;">~125 ms</span>
+              </div>
+              <div style="background:#1E293B;height:14px;border-radius:7px;overflow:hidden;">
+                <div id="bar-py" class="bench-bar" style="width:90%;background:var(--danger);"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:3px;">
+                <span>NumPy Vectorisé (2 * arr + 1)</span>
+                <span id="bench-np-time" style="color:var(--green);font-weight:800;">~1.8 ms (70x plus rapide !)</span>
+              </div>
+              <div style="background:#1E293B;height:14px;border-radius:7px;overflow:hidden;">
+                <div id="bar-np" class="bench-bar" style="width:5%;background:var(--green);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Broadcasting, shapes, strides & ndarray en mémoire)</summary>
+          <div class="detail-content">
+            <p><strong>1. Broadcasting NumPy :</strong> Permet d'additionner un tableau 2D <code>(4, 3)</code> avec un vecteur 1D <code>(3,)</code> sans dupliquer les données en mémoire vive.</p>
+            <p><strong>2. Contiguïté mémoire :</strong> Les tableaux NumPy <code>ndarray</code> sont stockés de façon continue dans le cache L1/L2 du processeur, éliminant le surcoût de pointeurs de la liste Python standard.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 3 : PANDAS DATAFRAMES -->
+      <section class="module-card" id="mod-3">
+        <div class="module-header">
+          <div class="module-num">03</div>
+          <h2>Data Science avec Pandas : Exploration & Filtrage</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          La table de données structurée (DataFrame) : sélection, filtrage booléen et aggrégations <code>groupby</code>.
+        </p>
+
+        <!-- Matérialisation 70% : Mini DataFrame interactif -->
+        <div class="visual-stage">
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <button class="btn-pomo primary" onclick="filterDF('all')">Tous les Étudiants (df)</button>
+            <button class="btn-pomo" onclick="filterDF('al')">Filière AL (df[df['filiere']=='AL'])</button>
+            <button class="btn-pomo" onclick="filterDF('top')">Moyenne >= 16</button>
+          </div>
+
+          <table style="width:100%;font-size:0.8rem;border-collapse:collapse;font-family:var(--font-mono);background:var(--surface);border-radius:8px;overflow:hidden;">
+            <thead>
+              <tr style="background:var(--surface2);text-align:left;color:var(--accent);">
+                <th style="padding:8px 10px;">id</th>
+                <th style="padding:8px 10px;">nom</th>
+                <th style="padding:8px 10px;">filiere</th>
+                <th style="padding:8px 10px;">score_ia</th>
+              </tr>
+            </thead>
+            <tbody id="df-tbody">
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:6px 10px;">0</td><td>Awa</td><td>AL</td><td>18.5</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:6px 10px;">1</td><td>Koffi</td><td>SI</td><td>14.0</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:6px 10px;">2</td><td>Fatou</td><td>AL</td><td>17.0</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 10px;">3</td><td>Yao</td><td>SRC</td><td>12.5</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (.loc, .iloc, merge, dropna & feature engineering)</summary>
+          <div class="detail-content">
+            <p><strong>1. loc vs iloc :</strong> <code>df.loc[lignes, colonnes]</code> sélectionne par étiquettes textuelles ; <code>df.iloc[lignes, colonnes]</code> sélectionne par indices entiers absolus de position.</p>
+            <p><strong>2. Prétraitement de données pour l'IA :</strong> Imputation des valeurs manquantes avec <code>df.fillna(df.mean())</code>, encodage des variables catégorielles avec <code>pd.get_dummies()</code> et normalisation standard avec <code>StandardScaler</code>.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 4 : PIPELINE SCIKIT-LEARN -->
+      <section class="module-card" id="mod-4">
+        <div class="module-header">
+          <div class="module-num">04</div>
+          <h2>Pipeline Machine Learning : Entraînement & Évaluation</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Les 4 étapes immuables d'un modèle : Découpage Train/Test, ajustement <code>.fit()</code>, prédiction <code>.predict()</code> et score.
+        </p>
+
+        <!-- Matérialisation 70% : Schéma de Split interactif -->
+        <div class="visual-stage">
+          <div style="font-weight:800;font-size:0.84rem;color:var(--accent);margin-bottom:8px;">
+            Simulateur de Split Données (Train 80% / Test 20%) :
+          </div>
+
+          <div style="display:flex;height:32px;border-radius:8px;overflow:hidden;margin-bottom:8px;">
+            <div style="width:80%;background:#3B82F6;display:grid;place-items:center;font-size:0.75rem;font-weight:800;color:#FFF;">
+              X_train, y_train (80% pour l'apprentissage)
+            </div>
+            <div style="width:20%;background:#10B981;display:grid;place-items:center;font-size:0.75rem;font-weight:800;color:#FFF;">
+              X_test, y_test (20%)
+            </div>
+          </div>
+
+          <div class="code-terminal">from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LogisticRegression()
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test) # -> 0.94</div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Surapprentissage Overfitting, Matrice de Confusion & F1-score)</summary>
+          <div class="detail-content">
+            <p><strong>1. Overfitting (Surapprentissage) :</strong> Le modèle mémorise le bruit du jeu d'entraînement mais échoue sur de nouvelles données réelles. Solutions : Régularisation (L1/L2), validation croisée (K-Fold Cross-Validation), augmentation de données.</p>
+            <p><strong>2. Métriques au-delà de l'accuracy :</strong> Précision (taux de vrais positifs parmi les prédictions positives), Rappel / Recall (taux de positifs détectés parmi tous les positifs réels) et F1-Score (moyenne harmonique).</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 5 : POO & TYPAGE ROBUSTE -->
+      <section class="module-card" id="mod-5">
+        <div class="module-header">
+          <div class="module-num">05</div>
+          <h2>Architecture Logicielle en Python : Dataclasses & Pydantic</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Structurer du code de production propre, typé et validé à l'exécution.
+        </p>
+
+        <!-- Matérialisation 70% : Démo Dataclass -->
+        <div class="visual-stage">
+          <div class="code-terminal">from dataclasses import dataclass
+from typing import Optional
+
+@dataclass(frozen=True)
+class AIModelArtifact:
+    name: str
+    version: str
+    accuracy: float
+    description: Optional[str] = None
+
+# Instanciation immutable et auto-documentée :
+artifact = AIModelArtifact(name="BERT-Classifier", version="v1.0", accuracy=0.96)</div>
+        </div>
+
+        <!-- Détail replié 30% -->
+        <details class="detail-box">
+          <summary>Voir le détail théorique (Typage statique avec mypy, Pydantic v2 & Asyncio)</summary>
+          <div class="detail-content">
+            <p><strong>1. Type Hinting :</strong> L'ajout d'annotations de types (<code>def predict(features: list[float]) -> float:</code>) permet la vérification statique avec <code>mypy</code>, éliminant les bugs avant le déploiement.</p>
+            <p><strong>2. Pydantic pour les API FastAPI :</strong> Valide automatiquement les structures JSON entrantes et sortantes avec sérialisation native performante écrite en Rust.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 6 : QCM D'EXAMEN -->
+      <section class="module-card" id="mod-6">
+        <div class="module-header">
+          <div class="module-num">06</div>
+          <h2>Examen Blanc & Auto-Évaluation (20 Questions /20)</h2>
+        </div>
+        <p style="font-size:0.85rem;color:var(--ink2);">
+          Teste tes connaissances Python IA pour l'épreuve de L2 AL.
+        </p>
+
+        <div class="visual-stage">
+          <div id="exam-py-box">
+            <div style="font-weight:800;font-size:0.88rem;color:var(--accent);margin-bottom:8px;">
+              Question Python IA L2
+            </div>
+            <div style="font-size:0.84rem;color:var(--ink);margin-bottom:12px;">
+              Dans une opération vectorisée NumPy, pourquoi l'exécution est-elle jusqu'à 100x plus rapide qu'une boucle Python classique ?
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <button class="btn-pomo" onclick="answerPy(0)">A. Parce que Python s'exécute dans le navigateur</button>
+              <button class="btn-pomo" onclick="answerPy(1)">B. Parce que les boucles sont exécutées en C compilé avec parallélisme SIMD sans interpréteur bytecode</button>
+              <button class="btn-pomo" onclick="answerPy(2)">C. Parce que NumPy compresse le code source</button>
+            </div>
+            <div id="py-feedback" style="margin-top:10px;font-size:0.8rem;display:none;"></div>
+          </div>
+
+          <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:10px;">
+            <span style="font-size:0.8rem;color:var(--ink2);">Note actuelle : <strong style="color:var(--accent);">20 / 20</strong> (Prévisionnel)</span>
+            <button class="btn-pomo primary" onclick="resetPyExam()">Recommencer</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- SIDEBAR DROITE -->
+    <aside class="sidebar-right">
+      <div class="pomo-box">
+        <div class="pomo-header">
+          <span>Focus Pomodoro</span>
+          <span id="py-pomo-mode-label" style="color:var(--ink3);">Travail (25m)</span>
+        </div>
+        <div class="pomo-time" id="py-pomo-display">25:00</div>
+        <div class="pomo-controls">
+          <button class="btn-pomo primary" onclick="startPyPomo()">Démarrer</button>
+          <button class="btn-pomo" onclick="pausePyPomo()">Pause</button>
+          <button class="btn-pomo" onclick="resetPyPomo()" title="Réinitialiser">↺</button>
+        </div>
+      </div>
+
+      <div class="pomo-box" style="margin-top:16px;">
+        <div style="font-size:0.74rem;font-weight:800;color:var(--ink3);text-transform:uppercase;margin-bottom:8px;">
+          Pépites Python & IA
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.5;text-align:left;">
+          • Bannir les boucles imbriquées en IA.<br>
+          • Utiliser le broadcasting NumPy.<br>
+          • 80% train / 20% test systématique.<br>
+          • Préférer <code>@dataclass(frozen=True)</code> pour l'immutabilité.
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- BARRE D'ONGLETS SMARTPHONE (<700px) -->
+  <nav class="tabbar">
+      <a href="../bibliotheque/index.html" class="tab-btn" title="Tous les cours (Hub)" style="color:var(--accent,#0284C7);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg><span>Hub (23)</span></a>
+    <a href="#mod-1" class="active">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+      <span>Syntaxe</span>
+    </a>
+    <a href="#mod-2">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
+      <span>NumPy</span>
+    </a>
+    <a href="#mod-3">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+      <span>Pandas</span>
+    </a>
+    <a href="#mod-4">
+      <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      <span>ML</span>
+    </a>
+    <a href="#mod-6">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+      <span>Examen</span>
+    </a>
+  </nav>
+
+  <script>
+    /* ===== LOGIQUE INTERACTIVE DU GUIDE PYTHON POUR IA ===== */
+    (function() {
+      'use strict';
+
+      // 1. Rideau Curtain
+      const curtain = document.getElementById('intro-curtain');
+      const enterBtn = document.getElementById('curtain-enter-btn');
+      if (enterBtn && curtain) {
+        enterBtn.addEventListener('click', () => {
+          curtain.classList.add('hidden');
+          saveMeta(18);
+        });
+      }
+
+      // 2. Synchronisation Hub PWA
+      function saveMeta(prog) {
+        try {
+          const meta = {
+            titre: "Python pour l'IA & Architecture",
+            slug: "python_ia",
+            couleur: "#38BDF8",
+            progression: prog || 25,
+            chapitresFaits: 2,
+            chapitresTotal: 6,
+            tempsMinutes: 45,
+            derniereVisite: new Date().toISOString(),
+            version: "2.0"
+          };
+          localStorage.setItem("guide:python_ia:meta", JSON.stringify(meta));
+          localStorage.setItem("guide:python_ia:v1", JSON.stringify(meta));
+        } catch(e) {}
+      }
+      saveMeta(20);
+
+      // 3. Pomodoro Focus Python
+      let pomoTimer = null;
+      let pomoSec = 25 * 60;
+      let pomoMode = "work";
+
+      window.startPyPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = setInterval(() => {
+          if (pomoSec > 0) {
+            pomoSec--;
+            const m = Math.floor(pomoSec / 60);
+            const s = pomoSec % 60;
+            const str = `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            const disp = document.getElementById('py-pomo-display');
+            if (disp) disp.innerText = str;
+          } else {
+            clearInterval(pomoTimer);
+            pomoTimer = null;
+            if (pomoMode === "work") {
+              pomoMode = "break";
+              pomoSec = 5 * 60;
+              alert("🎉 Bloc Python IA terminé ! 5 min de pause.");
+            } else {
+              pomoMode = "work";
+              pomoSec = 25 * 60;
+              alert("🔔 Pause terminée ! Prêt à coder des modèles ?");
+            }
+            const lbl = document.getElementById('py-pomo-mode-label');
+            if (lbl) lbl.innerText = pomoMode === "work" ? "Travail (25m)" : "Pause (5m)";
+          }
+        }, 1000);
+      };
+
+      window.pausePyPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = null;
+      };
+
+      window.resetPyPomo = function() {
+        if (pomoTimer) clearInterval(pomoTimer);
+        pomoTimer = null;
+        pomoMode = "work";
+        pomoSec = 25 * 60;
+        const disp = document.getElementById('py-pomo-display');
+        if (disp) disp.innerText = "25:00";
+        const lbl = document.getElementById('py-pomo-mode-label');
+        if (lbl) lbl.innerText = "Travail (25m)";
+      };
+
+      // 4. Démo Comprehension
+      window.runCompDemo = function() {
+        const res = document.getElementById('comp-result');
+        if (res) {
+          res.innerText = "Évaluation... -> [0, 4, 16, 36, 64] (Terminé en 0.04 ms)";
+        }
+      };
+
+      // 5. Benchmark NumPy
+      window.runBench = function() {
+        const barPy = document.getElementById('bar-py');
+        const barNp = document.getElementById('bar-np');
+        if (barPy && barNp) {
+          barPy.style.width = "95%";
+          barNp.style.width = "4%";
+        }
+      };
+
+      // 6. Filtrage DataFrame Pandas
+      window.filterDF = function(mode) {
+        const tbody = document.getElementById('df-tbody');
+        if (!tbody) return;
+        if (mode === 'all') {
+          tbody.innerHTML = `
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px 10px;">0</td><td>Awa</td><td>AL</td><td>18.5</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px 10px;">1</td><td>Koffi</td><td>SI</td><td>14.0</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px 10px;">2</td><td>Fatou</td><td>AL</td><td>17.0</td></tr>
+            <tr><td style="padding:6px 10px;">3</td><td>Yao</td><td>SRC</td><td>12.5</td></tr>
+          `;
+        } else if (mode === 'al') {
+          tbody.innerHTML = `
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px 10px;">0</td><td>Awa</td><td>AL</td><td>18.5</td></tr>
+            <tr><td style="padding:6px 10px;">2</td><td>Fatou</td><td>AL</td><td>17.0</td></tr>
+          `;
+        } else if (mode === 'top') {
+          tbody.innerHTML = `
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:6px 10px;">0</td><td>Awa</td><td>AL</td><td>18.5</td></tr>
+            <tr><td style="padding:6px 10px;">2</td><td>Fatou</td><td>AL</td><td>17.0</td></tr>
+          `;
+        }
+      };
+
+      // 7. Examen
+      window.answerPy = function(choice) {
+        const fb = document.getElementById('py-feedback');
+        fb.style.display = "block";
+        if (choice === 1) {
+          fb.style.color = "var(--green)";
+          fb.innerHTML = "✅ <strong>Exact !</strong> NumPy utilise des tableaux contigus en C avec des instructions vectorielles CPU (AVX/SIMD), éliminant l'overhead d'interpréteur.";
+        } else {
+          fb.style.color = "var(--danger)";
+          fb.innerHTML = "❌ <strong>Incorrect.</strong> Le gain vient des boucles natives en C et du calcul vectorisé sur mémoire contiguë.";
+        }
+      };
+
+      window.resetPyExam = function() {
+        const fb = document.getElementById('py-feedback');
+        if (fb) fb.style.display = "none";
+      };
+    })();
+  </script>
+</body>
+</html>

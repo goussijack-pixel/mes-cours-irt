@@ -1,0 +1,5 @@
+@font-face{font-family:'Orbitron';font-style:normal;font-display:swap;font-weight:400 900;src:url(fonts/orbitron-vf.woff2) format('woff2')}
+@font-face{font-family:'Red Hat Display';font-style:normal;font-display:swap;font-weight:300 900;src:url(fonts/red-hat-display-vf.woff2) format('woff2')}
+:root{--f-t:'Orbitron','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Red Hat Display',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F6F4EC;--sheet:#FFFFFF;--sheet2:#F3F3EE;--ink:#23231E;--ink2:#5E615E;--ink3:#939490;--line:#E0DECF;--acc:#967A0D;--acc2:#279E73;--acc-soft:#F2EFE2;--acc-ink:#FFFFFF;--glow:#A0862344;--code-bg:#20211F;--tab:#FCFCF9EE;--blue:#63787C;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#04130C;--sheet:#0A2016;--sheet2:#0F2C1E;--ink:#E9FFF3;--ink2:#90C9A9;--ink3:#5F8972;--line:#1A3D2B;--acc:#FACC15;--acc2:#34D399;--acc-soft:#303C16;--acc-ink:#08090C;--glow:#E1BA1488;--code-bg:#020905;--tab:#081C13EE;--blue:#9AA786;--blue-soft:#112E35}

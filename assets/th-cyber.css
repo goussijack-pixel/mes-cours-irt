@@ -1,0 +1,5 @@
+@font-face{font-family:'Share Tech Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/share-tech-mono-400.woff2) format('woff2')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/inter-tight-vf.woff2) format('woff2')}
+:root{--f-t:'Share Tech Mono','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Inter Tight',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F7EBEE;--sheet:#FFFFFF;--sheet2:#F4EBEF;--ink:#231621;--ink2:#5F5162;--ink3:#948793;--line:#E1CBD3;--acc:#F22B37;--acc2:#229952;--acc-soft:#FDE6E7;--acc-ink:#FFFFFF;--glow:#F23E4944;--code-bg:#201422;--tab:#FDF9FAEE;--blue:#965696;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#050505;--sheet:#0D0A0A;--sheet2:#150F0F;--ink:#F2ECEC;--ink2:#A8999A;--ink3:#6F6566;--line:#2A1A1B;--acc:#FF2D3A;--acc2:#39FF88;--acc-soft:#341012;--acc-ink:#FFFFFF;--glow:#E6293588;--code-bg:#020202;--tab:#0B0808EE;--blue:#A769A2;--blue-soft:#131B2B}

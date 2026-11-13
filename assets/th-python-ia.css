@@ -1,0 +1,7 @@
+@font-face{font-family:'Chakra Petch';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/chakra-petch-400.woff2) format('woff2')}
+@font-face{font-family:'Chakra Petch';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/chakra-petch-700.woff2) format('woff2')}
+@font-face{font-family:'Inter Tight';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/inter-tight-vf.woff2) format('woff2')}
+@font-face{font-family:'Fira Code';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/fira-code-vf.woff2) format('woff2')}
+:root{--f-t:'Chakra Petch','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Inter Tight',system-ui,sans-serif;--f-c:'Fira Code','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#ECF1FA;--sheet:#FFFFFF;--sheet2:#EBF0F9;--ink:#151E31;--ink2:#4D5A75;--ink3:#858FA4;--line:#CBD7EB;--acc:#4076D9;--acc2:#A68A26;--acc-soft:#E8EFFA;--acc-ink:#FFFFFF;--glow:#5182DC44;--code-bg:#121C32;--tab:#F9FBFEEE;--blue:#3870D1;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#06080F;--sheet:#0C1120;--sheet2:#121A30;--ink:#EAF2FF;--ink2:#97A7C7;--ink3:#646F87;--line:#1E2A47;--acc:#4B8BFF;--acc2:#FFD43B;--acc-soft:#162544;--acc-ink:#FFFFFF;--glow:#447EE788;--code-bg:#030407;--tab:#0A0E1BEE;--blue:#4386FA;--blue-soft:#13213E}

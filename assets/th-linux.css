@@ -1,0 +1,9 @@
+@font-face{font-family:'Ubuntu Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/ubuntu-mono-400.woff2) format('woff2')}
+@font-face{font-family:'Ubuntu Mono';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/ubuntu-mono-700.woff2) format('woff2')}
+@font-face{font-family:'Ubuntu';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/ubuntu-400.woff2) format('woff2')}
+@font-face{font-family:'Ubuntu';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/ubuntu-700.woff2) format('woff2')}
+@font-face{font-family:'Ubuntu Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/ubuntu-mono-400.woff2) format('woff2')}
+@font-face{font-family:'Ubuntu Mono';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/ubuntu-mono-700.woff2) format('woff2')}
+:root{--f-t:'Ubuntu Mono','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Ubuntu',system-ui,sans-serif;--f-c:'Ubuntu Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#EBF7F5;--sheet:#FFFFFF;--sheet2:#EAF5F5;--ink:#14262A;--ink2:#4B656C;--ink3:#83989C;--line:#CAE3E0;--acc:#22875C;--acc2:#A1832F;--acc-soft:#E4F1EB;--acc-ink:#FFFFFF;--glow:#36926B44;--code-bg:#11242B;--tab:#F9FDFCEE;--blue:#2C7DA1;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#090D0B;--sheet:#0F1613;--sheet2:#14201B;--ink:#E6FFF4;--ink2:#8FC2AC;--ink3:#608374;--line:#1E3329;--acc:#3DF5A7;--acc2:#F7C948;--acc-soft:#163A2B;--acc-ink:#08090C;--glow:#38DE9788;--code-bg:#040605;--tab:#0D1311EE;--blue:#3CBCCE;--blue-soft:#152533}

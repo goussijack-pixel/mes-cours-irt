@@ -1,0 +1,6 @@
+@font-face{font-family:'Red Hat Display';font-style:normal;font-display:swap;font-weight:300 900;src:url(fonts/red-hat-display-vf.woff2) format('woff2')}
+@font-face{font-family:'Manrope';font-style:normal;font-display:swap;font-weight:200 800;src:url(fonts/manrope-vf.woff2) format('woff2')}
+@font-face{font-family:'Source Code Pro';font-style:normal;font-display:swap;font-weight:200 900;src:url(fonts/source-code-pro-vf.woff2) format('woff2')}
+:root{--f-t:'Red Hat Display','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Manrope',system-ui,sans-serif;--f-c:'Source Code Pro','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#E9F1F9;--sheet:#FFFFFF;--sheet2:#E9F0F8;--ink:#121E2F;--ink2:#495C74;--ink3:#8190A3;--line:#C7D8E9;--acc:#1F80C9;--acc2:#3D988A;--acc-soft:#E4F0F9;--acc-ink:#FFFFFF;--glow:#338BCE44;--code-bg:#0F1D30;--tab:#F8FBFDEE;--blue:#2874CA;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#050B18;--sheet:#0A1428;--sheet2:#0F1C36;--ink:#E8F1FF;--ink2:#93A8CC;--ink3:#61718D;--line:#1A2C4E;--acc:#2496ED;--acc2:#5EEAD4;--acc-soft:#0E2948;--acc-ink:#FFFFFF;--glow:#2188D888;--code-bg:#02050B;--tab:#081123EE;--blue:#308CF2;--blue-soft:#112345}

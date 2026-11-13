@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Architecture Logicielle Pro & Tremplin Master IA — Guide d'Excellence</title>
+  <meta name="description" content="Guide pratique d'excellence : Architecture Logicielle avancée (Clean Archi, Hexagonale, Microservices, CI/CD), MLOps, pont Master IA et Portfolio L2 incontournable.">
+  <style>
+    :root {
+      --bg: #070B16;
+      --surface: #0E1626;
+      --surface2: #162035;
+      --surface-hover: #1E2C4A;
+      --border: #223254;
+      --border-focus: #0EA5E9;
+      --ink: #F1F5F9;
+      --ink2: #94A3B8;
+      --ink3: #64748B;
+      --accent: #0EA5E9;
+      --accent-grad: linear-gradient(135deg, #0EA5E9 0%, #6366F1 50%, #F59E0B 100%);
+      --gold: #F59E0B;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --radius: 18px;
+      --radius-sm: 10px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #F4F7FC;
+      --surface: #FFFFFF;
+      --surface2: #E8EEF8;
+      --surface-hover: #DEE7F4;
+      --border: #D1DDEE;
+      --border-focus: #0284C7;
+      --ink: #0F172A;
+      --ink2: #475569;
+      --ink3: #94A3B8;
+      --accent: #0284C7;
+      --accent-grad: linear-gradient(135deg, #0284C7 0%, #4F46E5 50%, #D97706 100%);
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* RIDEAU D'OUVERTURE */
+    #intro-curtain {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.4s ease, visibility 0.4s;
+    }
+    #intro-curtain.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .curtain-box {
+      max-width: 580px;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      box-shadow: var(--shadow);
+    }
+    .curtain-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: rgba(14, 165, 233, 0.15);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .curtain-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin-bottom: 12px;
+      background: var(--accent-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .curtain-desc {
+      font-size: 0.92rem;
+      color: var(--ink2);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .curtain-enter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      border-radius: 12px;
+      background: var(--accent-grad);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(14, 165, 233, 0.35);
+      transition: transform 0.15s ease;
+    }
+    .curtain-enter-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    /* MISE EN PAGE RESPONSIVE (3 VIEWPORTS) */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 290px minmax(0, 1fr) 290px;
+      min-height: 100vh;
+      width: 100%;
+      max-width: 1560px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1099px) {
+      .app-layout {
+        grid-template-columns: 88px minmax(0, 1fr);
+      }
+      .sidebar-right { display: none !important; }
+      .sidebar-left { display: none !important; }
+      .rail-nav { display: flex !important; }
+    }
+    @media (max-width: 699px) {
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+      .rail-nav { display: none !important; }
+      .tabbar { display: grid !important; }
+      main.content-area {
+        padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;
+      }
+    }
+
+    /* SIDEBAR GAUCHE (DESKTOP) */
+    .sidebar-left {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--accent-grad);
+      display: grid;
+      place-items: center;
+      color: #fff;
+    }
+    .brand-text h2 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .brand-text p {
+      font-size: 0.74rem;
+      color: var(--ink3);
+      font-weight: 700;
+    }
+    .hub-back-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: var(--surface2);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      transition: background 0.15s ease;
+    }
+    .hub-back-btn:hover {
+      background: var(--surface-hover);
+    }
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .nav-list a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 10px;
+      color: var(--ink2);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .nav-list a:hover, .nav-list a.active {
+      background: var(--surface2);
+      color: var(--ink);
+    }
+    .nav-list a.active {
+      border-left: 3px solid var(--accent);
+      color: var(--accent);
+    }
+
+    /* RAIL TABLETTE */
+    .rail-nav {
+      display: none;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 20;
+    }
+    .rail-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--ink2);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .rail-btn:hover, .rail-btn.active {
+      background: var(--surface2);
+      color: var(--accent);
+    }
+
+    /* TABBAR MOBILE */
+    .tabbar {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      grid-template-columns: repeat(5, 1fr);
+      padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+      z-index: 50;
+    }
+    .tab-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--ink3);
+      text-decoration: none;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 0;
+    }
+    .tab-btn.active {
+      color: var(--accent);
+    }
+
+    /* SIDEBAR DROITE (POMODORO & OBJECTIFS) */
+    .sidebar-right {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .pomo-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      text-align: center;
+    }
+    .pomo-time {
+      font-size: 2.2rem;
+      font-weight: 900;
+      font-family: var(--font-mono);
+      margin: 8px 0;
+      color: var(--ink);
+    }
+    .pomo-acts {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .pomo-btn {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pomo-btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ZONE DE CONTENU PRINCIPALE */
+    main.content-area {
+      padding: 32px 32px 80px;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hero-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      background: rgba(14, 165, 233, 0.15);
+      color: var(--accent);
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 0.95rem;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+
+    /* BLOCS DE CONTENU & SIMULATEURS */
+    .module-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-bottom: 28px;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(14, 165, 233, 0.15);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+    .section-title h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .section-title p {
+      font-size: 0.8rem;
+      color: var(--ink3);
+      font-weight: 600;
+    }
+
+    /* SIMULATEURS ET BOÎTES INTERACTIVES */
+    .interactive-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    .card-title {
+      font-size: 0.92rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent);
+    }
+    .control-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .ctrl-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .ctrl-btn:hover, .ctrl-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ACCORDÉON DÉTAIL-BOX (RÈGLE 70/30) */
+    details.detail-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin: 14px 0;
+      overflow: hidden;
+    }
+    details.detail-box summary {
+      padding: 12px 16px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--ink);
+      list-style: none;
+    }
+    details.detail-box summary::-webkit-details-marker { display: none; }
+    details.detail-box .detail-content {
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--ink2);
+      line-height: 1.6;
+    }
+
+    /* CODE PRE */
+    pre.code-block {
+      background: #060913;
+      border: 1px solid #1E293B;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: #E2E8F0;
+      overflow-x: auto;
+      margin: 10px 0;
+    }
+
+    /* CARTES PROJETS GITHUB */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+    .project-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-focus);
+    }
+    .project-badge {
+      align-self: flex-start;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--gold);
+    }
+    .project-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+    }
+    .project-desc {
+      font-size: 0.8rem;
+      color: var(--ink2);
+      line-height: 1.45;
+      flex: 1;
+    }
+    .project-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .tag-pill {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink3);
+      font-family: var(--font-mono);
+    }
+  
+/* ===== BANDEAU UNIFIÉ ÉTUDIANT & RETOUR HUB L2 IRT ===== */
+.universal-student-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: var(--surface, rgba(17, 24, 39, 0.95));
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 95;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-sizing: border-box;
+  width: 100%;
+}
+.universal-hub-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: var(--surface2, rgba(255, 255, 255, 0.08));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
+  color: var(--ink, #F9FAFB);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+.universal-hub-link:hover {
+  background: var(--accent, #0284C7);
+  color: #FFFFFF;
+  border-color: var(--accent, #0284C7);
+}
+.universal-student-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--ink, #F9FAFB);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.universal-student-pill:hover {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: #F59E0B;
+}
+.universal-student-pill:active {
+  transform: scale(0.96);
+}
+.universal-student-pill .crown { font-size: 0.95rem; }
+.universal-student-pill .sub-tag { font-size: 0.72rem; opacity: 0.8; font-weight: 700; }
+.universal-student-pill .edit-pen { font-size: 0.72rem; opacity: 0.75; }
+
+</style>
+</head>
+<body>
+
+  <!-- RIDEAU D'OUVERTURE ACCESSIBLE -->
+  <div id="intro-curtain">
+    <div class="curtain-box">
+      <div class="curtain-badge">Arsenal de Compétences Avancées</div>
+      <h1 class="curtain-title">Architecture Logicielle Pro & Master IA</h1>
+      <p class="curtain-desc">
+        Comment dépasser le cadre académique, maîtriser les architectures d'entreprise (Clean Archi, Hexagonale, Microservices, CI/CD), bâtir un portfolio GitHub incontournable pour décrocher le meilleur stage L2, et préparer le Master en Intelligence Artificielle sans lacunes.
+      </p>
+      <button class="curtain-enter-btn" id="curtain-enter-btn">
+        <span>Accéder à l'Arsenal d'Excellence</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="app-layout">
+    
+    <!-- SIDEBAR GAUCHE (DESKTOP) -->
+    <aside class="sidebar-left">
+      <div class="brand-box">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="brand-text">
+          <h2>Archi Logicielle Pro</h2>
+          <p>MASTER IA & STAGE L2</p>
+        </div>
+      </div>
+
+      <a href="../bibliotheque/index.html" class="hub-back-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        <span>Retour Bibliothèque</span>
+      </a>
+
+      <ul class="nav-list">
+        <li><a href="#clean-archi" class="active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> 1. Clean & Hexagonale</a></li>
+        <li><a href="#microservices"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg> 2. Microservices & API</a></li>
+        <li><a href="#cicd-devops"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 3. CI/CD & Docker Pro</a></li>
+        <li><a href="#pont-master-ia"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> 4. Pont Master IA & MLOps</a></li>
+        <li><a href="#portfolio-stage"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> 5. Portfolio L2 Star & CV</a></li>
+        <li><a href="#certifs-reference"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5 4-2 4 2-2-5"/><circle cx="12" cy="8" r="6"/></svg> 6. Certifications Mondiales</a></li>
+      </ul>
+    </aside>
+
+    <!-- RAIL TABLETTE (88PX) -->
+    <nav class="rail-nav">
+      <a href="../bibliotheque/index.html" class="rail-btn" title="Bibliothèque"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></a>
+      <a href="#clean-archi" class="rail-btn active" title="Clean Archi"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></a>
+      <a href="#microservices" class="rail-btn" title="Microservices"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/></svg></a>
+      <a href="#cicd-devops" class="rail-btn" title="CI/CD"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg></a>
+      <a href="#pont-master-ia" class="rail-btn" title="Master IA"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></a>
+      <a href="#portfolio-stage" class="rail-btn" title="Portfolio"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></a>
+    </nav>
+
+    <!-- TABBAR MOBILE -->
+    <nav class="tabbar">
+      <a href="../bibliotheque/index.html" class="tab-btn" title="Tous les cours (Hub)" style="color:var(--accent,#0284C7);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 22"></polyline></svg><span>Hub (23)</span></a>
+      <a href="#clean-archi" class="tab-btn active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg><span>Archi</span></a>
+      <a href="#microservices" class="tab-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/></svg><span>Services</span></a>
+      <a href="#cicd-devops" class="tab-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/></svg><span>CI/CD</span></a>
+      <a href="#pont-master-ia" class="tab-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>IA</span></a>
+      <a href="#portfolio-stage" class="tab-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>Portfolio</span></a>
+    </nav>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main class="content-area">
+      
+      <!-- HERO BANNER -->
+      <header class="hero-banner">
+        <div class="hero-pill">Accélération de Carrière · Filière AL & IA</div>
+        <h1 class="hero-title">Architecture Logicielle d'Élite & Tremplin Master IA</h1>
+        <p class="hero-sub">
+          Le guide stratégique pour dépasser les examens scolaires, bâtir un portfolio GitHub de calibre professionnel qu'aucune entreprise ne peut refuser, et maîtriser le déploiement d'architectures d'IA en production.
+        </p>
+      </header>
+
+      <!-- MODULE 1 : CLEAN ARCHITECTURE & HEXAGONALE -->
+      <section class="module-section" id="clean-archi">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <div class="section-title">
+            <h2>1. Clean Architecture & Architecture Hexagonale</h2>
+            <p>CONCEPTION MODULAIRE INDÉPENDANTE DES FRAMEWORKS ET DES BDD</p>
+          </div>
+        </div>
+
+        <p style="font-size:0.88rem; color:var(--ink2); line-height:1.6;">
+          En entreprise, le code couplé directement à la base de données (ex: requêtes SQL au milieu des contrôleurs) est interdit. On applique la <strong>Règle de Dépendance</strong> : le cœur métier (Domain) ne dépend d'aucun framework externe.
+        </p>
+
+        <!-- SIMULATEUR VISUEL DE COUCHES ARCHITECTURALES -->
+        <div class="interactive-card">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Simulateur Interactif : Flux de Dépendance Hexagonale</span>
+          </div>
+          <div class="control-row">
+            <button class="ctrl-btn active" onclick="switchLayer('domain')">1. Domaine (Entités & Règles)</button>
+            <button class="ctrl-btn" onclick="switchLayer('usecases')">2. Cas d'Utilisation (Application)</button>
+            <button class="ctrl-btn" onclick="switchLayer('adapters')">3. Adaptateurs (Contrôleurs / Repos)</button>
+            <button class="ctrl-btn" onclick="switchLayer('infra')">4. Infrastructure (PostgreSQL / Web)</button>
+          </div>
+          <div id="layer-display" style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px;">
+            <div style="font-weight:800; color:var(--accent); margin-bottom:6px;" id="layer-title">Cœur de Domaine (Entities)</div>
+            <p style="font-size:0.84rem; color:var(--ink2); line-height:1.5;" id="layer-desc">
+              Ne dépend de RIEN. Contient uniquement les objets métiers purs (ex: Classe `CompteBancaire`, `Commande`) et les règles invariantes (un solde ne peut pas être inférieur à zéro).
+            </p>
+            <div style="margin-top:10px; font-family:var(--font-mono); font-size:0.75rem; color:#A7F3D0;" id="layer-code">
+              // Zéro import de base de données ou de framework web ici !<br>
+              public class CompteBancaire { private double solde; public void debiter(double m) { ... } }
+            </div>
+          </div>
+        </div>
+
+        <details class="detail-box">
+          <summary>
+            <span>Théorie Approfondie : Le Principe d'Inversion de Dépendance (DIP)</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="detail-content">
+            Au lieu que votre Service instancie directement `new PostgresDatabase()`, le Service dépend d'une interface abstraite `UserRepository`. C'est le module d'infrastructure qui implémente cette interface (`PostgresUserRepository implements UserRepository`). Résultat : vous pouvez remplacer PostgreSQL par MongoDB ou un mock de test en modifiant 1 seule ligne de configuration !
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 2 : MICROSERVICES & API GATEWAY -->
+      <section class="module-section" id="microservices">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/></svg>
+          </div>
+          <div class="section-title">
+            <h2>2. Microservices, API REST & Sécurité API</h2>
+            <p>DÉCOUPLAGE, PASSAGE À L'ÉCHELLE & JETONS JWT STATELESS</p>
+          </div>
+        </div>
+
+        <!-- SIMULATEUR D'API GATEWAY & FLUX D'AUTHENTIFICATION -->
+        <div class="interactive-card">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Simulateur en Direct : Pipeline API Gateway & Sécurité</span>
+          </div>
+          <div class="control-row">
+            <button class="ctrl-btn active" onclick="testGateway('valid')">Requête Valide avec JWT Bearer</button>
+            <button class="ctrl-btn" onclick="testGateway('expired')">Jeton JWT Expiré</button>
+            <button class="ctrl-btn" onclick="testGateway('ddos')">Attaque par Brute-Force (Rate Limit)</button>
+          </div>
+          <div id="gateway-res" style="background:#050914; border:1px solid #1E293B; border-radius:12px; padding:16px; font-family:var(--font-mono); font-size:0.8rem; color:#E2E8F0;">
+            <span style="color:#10B981;">[HTTP 200 OK]</span> API Gateway valide le JWT HMAC-SHA256 -> Routage interne vers Service Commandes en 1.8 ms.
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 3 : CI/CD & DOCKER DEVOPS -->
+      <section class="module-section" id="cicd-devops">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <div class="section-title">
+            <h2>3. CI/CD GitHub Actions & Multi-Stage Docker</h2>
+            <p>L'USINE LOGICIELLE AUTOMATISÉE PRÊTE POUR LE CLOUD</p>
+          </div>
+        </div>
+
+        <p style="font-size:0.88rem; color:var(--ink2); line-height:1.6;">
+          Un candidat L2 qui maîtrise les <strong>GitHub Actions</strong> et le build Docker multi-étages se démarque instantanément de 99% des étudiants. Voici le pipeline industriel automatisé à chaque `git push`.
+        </p>
+
+        <!-- VISUALISATEUR CI/CD EN TEMPS RÉEL -->
+        <div class="interactive-card">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>Simulateur de Pipeline CI/CD GitHub Actions</span>
+          </div>
+          <div style="display:flex; gap:8px; margin-bottom:14px;">
+            <button class="ctrl-btn primary" id="run-pipeline-btn" onclick="runPipeline()">Lancer le Pipeline Automatique</button>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:10px;" id="pipeline-steps">
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center;">
+              <div style="font-size:0.75rem; color:var(--ink3);">1. LINT</div>
+              <div style="font-weight:800; font-size:0.85rem;" id="step-1">En attente</div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center;">
+              <div style="font-size:0.75rem; color:var(--ink3);">2. TESTS</div>
+              <div style="font-weight:800; font-size:0.85rem;" id="step-2">En attente</div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center;">
+              <div style="font-size:0.75rem; color:var(--ink3);">3. DOCKER BUILD</div>
+              <div style="font-weight:800; font-size:0.85rem;" id="step-3">En attente</div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center;">
+              <div style="font-size:0.75rem; color:var(--ink3);">4. SCAN TRIVY</div>
+              <div style="font-weight:800; font-size:0.85rem;" id="step-4">En attente</div>
+            </div>
+            <div style="background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center;">
+              <div style="font-size:0.75rem; color:var(--ink3);">5. DÉPLOIEMENT</div>
+              <div style="font-weight:800; font-size:0.85rem;" id="step-5">En attente</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 4 : PONT VERS LE MASTER IA (MLOPS & MATHS INTUITIVES) -->
+      <section class="module-section" id="pont-master-ia">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="section-title">
+            <h2>4. Le Pont Direct vers le Master en Intelligence Artificielle</h2>
+            <p>DÉMYTHIFICATION DES MATHS, TENSEURS & ARCHITECTURE MLOPS</p>
+          </div>
+        </div>
+
+        <div class="interactive-card">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <span>Démystificateur de Notions Mathématiques pour l'IA</span>
+          </div>
+          <div class="control-row">
+            <button class="ctrl-btn active" onclick="showMath('tensor')">Tenseurs</button>
+            <button class="ctrl-btn" onclick="showMath('gradient')">Gradients & Dérivées</button>
+            <button class="ctrl-btn" onclick="showMath('softmax')">Softmax & Probabilités</button>
+            <button class="ctrl-btn" onclick="showMath('loss')">Fonction de Perte (Loss)</button>
+          </div>
+          <div id="math-display" style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px;">
+            <div style="font-weight:800; color:var(--accent); margin-bottom:6px;" id="math-title">Les Tenseurs : Des Tableaux Multidimensionnels</div>
+            <p style="font-size:0.84rem; color:var(--ink2); line-height:1.5;" id="math-desc">
+              Ne soyez pas intimidé par le mot « tenseur ». C'est simplement le nom mathématique pour désigner une structure de données : un scalaire est 0D, un vecteur est 1D, une matrice est 2D, une image couleur est un tenseur 3D [Hauteur, Largeur, Couleurs RGB], et un lot d'images d'entraînement est un tenseur 4D [Batch, H, L, RGB].
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 5 : PORTFOLIO STAR GITHUB POUR LE STAGE L2 -->
+      <section class="module-section" id="portfolio-stage">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="section-title">
+            <h2>5. Le Kit Portfolio GitHub 5 Étoiles pour le Stage L2</h2>
+            <p>5 PROJETS MAJEURS QUI RENDENT VOTRE PROFIL INCONTOURNABLE</p>
+          </div>
+        </div>
+
+        <p style="font-size:0.88rem; color:var(--ink2); line-height:1.6;">
+          Voici les 5 projets concrets à ajouter sur votre profil GitHub. Lorsque les recruteurs verront ces dépôts propres, documentés avec Docker et Clean Architecture, votre candidature sera acceptée en priorité.
+        </p>
+
+        <div class="project-grid">
+          
+          <div class="project-card">
+            <span class="project-badge">Archi Logicielle</span>
+            <div class="project-title">1. Clean-Architecture E-Commerce Core API</div>
+            <p class="project-desc">
+              API REST en Java/Spring Boot ou Python/FastAPI conçue selon l'architecture hexagonale. Découplage complet, transactions PostgreSQL avec verrous pessimistes, cache Redis et couverture de tests à 95%.
+            </p>
+            <div class="project-tags">
+              <span class="tag-pill">Clean Archi</span>
+              <span class="tag-pill">PostgreSQL</span>
+              <span class="tag-pill">Docker</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <span class="project-badge">DevOps & Haute Dispo</span>
+            <div class="project-title">2. Async Task Queue & Worker Pipeline</div>
+            <p class="project-desc">
+              Gestionnaire de tâches asynchrones distribuées avec RabbitMQ/Redis, gestion des échecs (Dead Letter Queue) et monitoring temps réel avec Prometheus et Grafana.
+            </p>
+            <div class="project-tags">
+              <span class="tag-pill">Redis</span>
+              <span class="tag-pill">RabbitMQ</span>
+              <span class="tag-pill">Grafana</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <span class="project-badge">IA & MLOps</span>
+            <div class="project-title">3. FastAPI Deep-Learning Model Serving</div>
+            <p class="project-desc">
+              Déploiement conteneurisé d'un modèle d'inférence avec FastAPI, optimisation par ONNX Runtime, validation stricte par Pydantic et temps de réponse moyen &lt; 8 ms.
+            </p>
+            <div class="project-tags">
+              <span class="tag-pill">FastAPI</span>
+              <span class="tag-pill">ONNX</span>
+              <span class="tag-pill">Docker</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <span class="project-badge">IA & LLM / RAG</span>
+            <div class="project-title">4. Enterprise Secure RAG Document Engine</div>
+            <p class="project-desc">
+              Moteur de questions/réponses sur documents PDF internes avec vectorisation (ChromaDB / FAISS), modèle local Ollama/Mistral, sans fuite de données vers l'extérieur.
+            </p>
+            <div class="project-tags">
+              <span class="tag-pill">RAG</span>
+              <span class="tag-pill">ChromaDB</span>
+              <span class="tag-pill">Python</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <span class="project-badge">Fullstack Pro</span>
+            <div class="project-title">5. Real-Time Collaborative System Studio</div>
+            <p class="project-desc">
+              Application collaborative temps réel avec WebSockets, synchronisation d'état multi-utilisateurs et persistance sécurisée.
+            </p>
+            <div class="project-tags">
+              <span class="tag-pill">TypeScript</span>
+              <span class="tag-pill">WebSockets</span>
+              <span class="tag-pill">React</span>
+            </div>
+          </div>
+
+        </div>
+
+        <details class="detail-box">
+          <summary>
+            <span>Structure du README GitHub Idéal (Template Infaillible)</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="detail-content">
+            Un bon dépôt GitHub doit comporter :<br>
+            1. <strong>Badges Shields.io</strong> : Build status, Test coverage, License MIT, Docker ready.<br>
+            2. <strong>Schéma d'architecture Mermaid</strong> : Diagramme illustrant les flux entre l'API, la BDD et le Cache.<br>
+            3. <strong>Guide de démarrage en 1 ligne</strong> : `docker compose up -d` pour que le recruteur puisse tester le projet sans rien installer d'autre.
+          </div>
+        </details>
+      </section>
+
+      <!-- MODULE 6 : CERTIFICATIONS DE RÉFÉRENCE -->
+      <section class="module-section" id="certifs-reference">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15l-2 5 4-2 4 2-2-5"/><circle cx="12" cy="8" r="6"/></svg>
+          </div>
+          <div class="section-title">
+            <h2>6. Le Répertoire des Certifications Internationales</h2>
+            <p>100% GRATUITES IMMÉDIATES & CERTIFICATIONS INDUSTRIELLES PAYANTES</p>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <div style="background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:18px;">
+            <div style="color:var(--success); font-weight:800; font-size:0.92rem; margin-bottom:8px;">★ 100% Gratuites à Décrocher dès la L2</div>
+            <ul style="font-size:0.82rem; color:var(--ink2); line-height:1.6; padding-left:18px;">
+              <li><strong>Google Cloud Skills Boost</strong> : Intro to Generative AI & Large Language Models (Badge numérique vérifiable).</li>
+              <li><strong>IBM SkillsBuild</strong> : AI Fundamentals & Software Engineering (Badge Credly).</li>
+              <li><strong>Harvard University CS50</strong> : CS50 AI with Python (Certificat gratuit CS50).</li>
+              <li><strong>Cisco Networking Academy</strong> : Python Essentials 1 & 2 + Intro to Cybersecurity.</li>
+              <li><strong>Kaggle</strong> : Machine Learning, Pandas, Feature Engineering, Deep Learning.</li>
+            </ul>
+          </div>
+          <div style="background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:18px;">
+            <div style="color:var(--gold); font-weight:800; font-size:0.92rem; margin-bottom:8px;">★ Certifications de Haut Rang (Investissement / Entreprise)</div>
+            <ul style="font-size:0.82rem; color:var(--ink2); line-height:1.6; padding-left:18px;">
+              <li><strong>AWS Certified Solutions Architect – Associate (SAA-C03)</strong> : La référence absolue du Cloud mondial (~150$).</li>
+              <li><strong>Google Cloud Professional Machine Learning Engineer</strong> : Reconnaissance ultime pour l'ingénierie IA.</li>
+              <li><strong>HashiCorp Certified : Terraform Associate</strong> : Maîtrise de l'Infrastructure as Code (IaC).</li>
+              <li><strong>CKA (Certified Kubernetes Administrator)</strong> : Orchestration de conteneurs à grande échelle.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- SIDEBAR DROITE (DESKTOP) -->
+    <aside class="sidebar-right">
+      <div class="pomo-card">
+        <div style="font-size:0.75rem; font-weight:800; color:var(--ink3); text-transform:uppercase;">Session Focus Pro</div>
+        <div class="pomo-time" id="pomo-timer">25:00</div>
+        <div class="pomo-acts">
+          <button class="pomo-btn primary" id="pomo-toggle">Démarrer</button>
+          <button class="pomo-btn" id="pomo-reset">Reset</button>
+        </div>
+      </div>
+
+      <div style="background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:16px;">
+        <div style="font-size:0.75rem; font-weight:800; color:var(--accent); text-transform:uppercase; margin-bottom:10px;">Objectifs Stage L2 & Master</div>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.8rem; color:var(--ink2);">
+          <li style="display:flex; align-items:center; gap:8px;"><span style="color:var(--success);">✓</span> 22 Cours L2 IRT Validés</li>
+          <li style="display:flex; align-items:center; gap:8px;"><span style="color:var(--gold);">★</span> 1er Projet Clean Archi sur GitHub</li>
+          <li style="display:flex; align-items:center; gap:8px;"><span style="color:var(--gold);">★</span> 2 Certifications Gratuites (IBM / Google)</li>
+          <li style="display:flex; align-items:center; gap:8px;"><span style="color:var(--gold);">★</span> CV calibré pour le Stage L2</li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    // Rideau d'ouverture
+    const curtain = document.getElementById('intro-curtain');
+    const curtainBtn = document.getElementById('curtain-enter-btn');
+    if (curtainBtn) {
+      curtainBtn.addEventListener('click', () => {
+        curtain.classList.add('hidden');
+      });
+    }
+
+    // Simulateur Hexagonal
+    const layerData = {
+      domain: {
+        title: "1. Cœur de Domaine (Entities & Règles Métier)",
+        desc: "Ne dépend de RIEN. Contient uniquement les objets métiers purs (ex: Classe CompteBancaire, Commande) et les règles invariantes sans aucune bibliothèque tierce.",
+        code: "public class CompteBancaire { private double solde; public void debiter(double m) { if (solde >= m) solde -= m; } }"
+      },
+      usecases: {
+        title: "2. Cas d'Utilisation (Application Services)",
+        desc: "Orchestre les entités pour réaliser les scénarios de l'application (ex: EffectuerVirementUseCase). Définit des interfaces (Ports) pour interagir avec l'extérieur.",
+        code: "public class VirementService { private final CompteRepository repo; public void virer(...) { ... } }"
+      },
+      adapters: {
+        title: "3. Adaptateurs d'Interface (Contrôleurs & Repositories)",
+        desc: "Traduit les données de l'extérieur vers le domaine et vice-versa. Exemple : Contrôleur REST Spring qui reçoit du JSON et appelle le Use Case.",
+        code: "@RestController public class CompteController { @PostMapping('/virement') public Response virer(@RequestBody DTO req) { ... } }"
+      },
+      infra: {
+        title: "4. Infrastructure (Frameworks, Drivers, BDD)",
+        desc: "Les détails d'implémentation interchangeables : PostgreSQL, Redis, SendGrid Emailing, AWS S3. Ils dépendent tous des interfaces définies à l'intérieur !",
+        code: "public class PostgresCompteRepository implements CompteRepository { @Override public Compte findById(UUID id) { ... } }"
+      }
+    };
+
+    function switchLayer(key) {
+      const data = layerData[key];
+      if (!data) return;
+      document.querySelectorAll('.control-row .ctrl-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('layer-title').innerText = data.title;
+      document.getElementById('layer-desc').innerText = data.desc;
+      document.getElementById('layer-code').innerHTML = data.code;
+    }
+
+    // Simulateur Gateway
+    function testGateway(status) {
+      const el = document.getElementById('gateway-res');
+      if (status === 'valid') {
+        el.innerHTML = '<span style="color:#10B981;">[HTTP 200 OK]</span> JWT Bearer valide (Rôle: ADMIN) -> Requête acheminée vers Microservice en 1.4ms.';
+      } else if (status === 'expired') {
+        el.innerHTML = '<span style="color:#EF4444;">[HTTP 401 Unauthorized]</span> Jeton JWT expiré à 08:30:00 GMT. Signature révoquée par API Gateway.';
+      } else {
+        el.innerHTML = '<span style="color:#F59E0B;">[HTTP 429 Too Many Requests]</span> Limite de 100 req/min dépassée depuis cette adresse IP. Blocage temporaire 60s.';
+      }
+    }
+
+    // Simulateur CI/CD
+    function runPipeline() {
+      const steps = [
+        { id: 'step-1', name: 'Lint (Clean Code)' },
+        { id: 'step-2', name: 'Tests Unitaires (100%)' },
+        { id: 'step-3', name: 'Docker Build (Multi-stage)' },
+        { id: 'step-4', name: 'Scan Sécurité Trivy (0 CVE)' },
+        { id: 'step-5', name: 'Déploiement Cloud (Prêt)' }
+      ];
+      steps.forEach((s, idx) => {
+        const el = document.getElementById(s.id);
+        el.innerText = 'Exécution...';
+        el.style.color = 'var(--gold)';
+        setTimeout(() => {
+          el.innerText = 'Succès ✓';
+          el.style.color = 'var(--success)';
+        }, (idx + 1) * 350);
+      });
+    }
+
+    // Démystificateur Maths
+    const mathData = {
+      tensor: {
+        title: "Les Tenseurs : Des Tableaux Multidimensionnels",
+        desc: "Ne soyez pas intimidé par le mot « tenseur ». C'est simplement le nom mathématique pour désigner une structure de données : un scalaire est 0D, un vecteur est 1D, une matrice est 2D, une image couleur est un tenseur 3D [Hauteur, Largeur, Couleurs RGB], et un lot d'images d'entraînement est un tenseur 4D [Batch, H, L, RGB]."
+      },
+      gradient: {
+        title: "Le Gradient : Une Simple Boussole d'Optimisation",
+        desc: "En dimension 1, la dérivée donne la pente. En dimension N, le gradient est simplement le vecteur de toutes les pentes partielles. Le signe MOINS dans θ = θ - α∇J signifie juste : on avance dans la direction qui descend le fond de la vallée d'erreur !"
+      },
+      softmax: {
+        title: "Softmax : La Fabrique de Pourcentages Intelligente",
+        desc: "Un réseau de neurones sort des nombres bruts appelés logits (ex: 8.5, 2.1, 0.4). La formule Softmax les transforme en probabilités positives dont la somme vaut exactement 100% (ex: 92% Chat, 7% Chien, 1% Oiseau)."
+      },
+      loss: {
+        title: "La Fonction de Perte (Loss) : L'Écart à Réduire",
+        desc: "C'est la note que l'IA se donne à elle-même pour savoir à quel point elle s'est trompée. Entraîner une IA ne consiste en rien d'autre qu'à minimiser cette valeur par petits pas successifs."
+      }
+    };
+
+    function showMath(key) {
+      const d = mathData[key];
+      if (!d) return;
+      document.getElementById('math-title').innerText = d.title;
+      document.getElementById('math-desc').innerText = d.desc;
+    }
+
+    // Minuteur Pomodoro
+    let pomoSeconds = 1500;
+    let pomoInterval = null;
+    const pomoTimerEl = document.getElementById('pomo-timer');
+    const pomoToggleBtn = document.getElementById('pomo-toggle');
+    const pomoResetBtn = document.getElementById('pomo-reset');
+
+    function updatePomo() {
+      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
+      const s = (pomoSeconds % 60).toString().padStart(2, '0');
+      pomoTimerEl.innerText = `${m}:${s}`;
+    }
+
+    if (pomoToggleBtn) {
+      pomoToggleBtn.addEventListener('click', () => {
+        if (pomoInterval) {
+          clearInterval(pomoInterval);
+          pomoInterval = null;
+          pomoToggleBtn.innerText = 'Démarrer';
+        } else {
+          pomoToggleBtn.innerText = 'Pause';
+          pomoInterval = setInterval(() => {
+            if (pomoSeconds > 0) {
+              pomoSeconds--;
+              updatePomo();
+            } else {
+              clearInterval(pomoInterval);
+              pomoInterval = null;
+              alert('🎉 Session Focus terminée ! Prenez une pause de 5 minutes.');
+            }
+          }, 1000);
+        }
+      });
+    }
+
+    if (pomoResetBtn) {
+      pomoResetBtn.addEventListener('click', () => {
+        clearInterval(pomoInterval);
+        pomoInterval = null;
+        pomoSeconds = 1500;
+        updatePomo();
+        if (pomoToggleBtn) pomoToggleBtn.innerText = 'Démarrer';
+      });
+    }
+  </script>
+</body>
+</html>

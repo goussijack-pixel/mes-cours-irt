@@ -1,0 +1,5 @@
+@font-face{font-family:'Fraunces';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/fraunces-vf.woff2) format('woff2')}
+@font-face{font-family:'Red Hat Display';font-style:normal;font-display:swap;font-weight:300 900;src:url(fonts/red-hat-display-vf.woff2) format('woff2')}
+:root{--f-t:'Fraunces','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Red Hat Display',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F6F2E8;--sheet:#FFFDF7;--sheet2:#FBF7EC;--ink:#1B2340;--ink2:#555C78;--ink3:#8D909F;--line:#DED6C2;--acc:#4338CA;--acc2:#DC2626;--acc-soft:#E8E5F2;--acc-ink:#FFFFFF;--glow:#554BCD44;--code-bg:#11152E;--tab:#FCFAF2EE;--blue:#3F5DE0;--blue-soft:#E4ECF7}
+html[data-theme="dark"]{--paper:#0C0F1F;--sheet:#141729;--sheet2:#1B1E35;--ink:#ECEFF5;--ink2:#99A0BD;--ink3:#686D86;--line:#2A2D50;--acc:#7B74DA;--acc2:#DC2626;--acc-soft:#242645;--acc-ink:#FFFFFF;--glow:#706AC788;--code-bg:#05070E;--tab:#121526EE;--blue:#5B7BE8;--blue-soft:#192646}

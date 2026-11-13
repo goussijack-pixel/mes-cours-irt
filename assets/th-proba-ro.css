@@ -1,0 +1,5 @@
+@font-face{font-family:'Space Grotesk';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/space-grotesk-vf.woff2) format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/space-grotesk-vf.woff2) format('woff2')}
+:root{--f-t:'Space Grotesk','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Space Grotesk',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F6EFF6;--sheet:#FFFFFF;--sheet2:#F3EEF6;--ink:#221C2B;--ink2:#5E586E;--ink3:#938D9E;--line:#E0D4E2;--acc:#C35B92;--acc2:#98862B;--acc-soft:#F8EBF2;--acc-ink:#FFFFFF;--glow:#C86A9C44;--code-bg:#1F1A2C;--tab:#FCFAFCEE;--blue:#7968BA;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#120814;--sheet:#1C0F21;--sheet2:#26142C;--ink:#FFEAF6;--ink2:#C9A3BD;--ink3:#896D82;--line:#3A1F42;--acc:#F472B6;--acc2:#FDE047;--acc-soft:#3F1F39;--acc-ink:#FFFFFF;--glow:#DD67A688;--code-bg:#080409;--tab:#190D1DEE;--blue:#987AD6;--blue-soft:#201F3F}

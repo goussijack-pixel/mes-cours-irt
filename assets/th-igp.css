@@ -1,0 +1,5 @@
+@font-face{font-family:'Manrope';font-style:normal;font-display:swap;font-weight:200 800;src:url(fonts/manrope-vf.woff2) format('woff2')}
+@font-face{font-family:'Manrope';font-style:normal;font-display:swap;font-weight:200 800;src:url(fonts/manrope-vf.woff2) format('woff2')}
+:root{--f-t:'Manrope','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Manrope',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F1F3F7;--sheet:#FFFFFF;--sheet2:#F7F8FB;--ink:#111827;--ink2:#4B5563;--ink3:#858C97;--line:#D9DEE7;--acc:#EA580C;--acc2:#2563EB;--acc-soft:#FCEBE2;--acc-ink:#FFFFFF;--glow:#EB682444;--code-bg:#1F181E;--tab:#FBFBFDEE;--blue:#8B687B;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#161114;--sheet:#1E191E;--sheet2:#282126;--ink:#ECEFF5;--ink2:#AAA3AA;--ink3:#767076;--line:#433233;--acc:#EA580C;--acc2:#306BEC;--acc-soft:#3F231B;--acc-ink:#FFFFFF;--glow:#D5510D88;--code-bg:#0A0809;--tab:#1C171BEE;--blue:#9D7C8E;--blue-soft:#22283C}

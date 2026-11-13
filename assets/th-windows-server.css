@@ -1,0 +1,5 @@
+@font-face{font-family:'Outfit';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/outfit-vf.woff2) format('woff2')}
+@font-face{font-family:'Outfit';font-style:normal;font-display:swap;font-weight:100 900;src:url(fonts/outfit-vf.woff2) format('woff2')}
+:root{--f-t:'Outfit','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Outfit',system-ui,sans-serif;--f-c:'JetBrains Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#EDF2F8;--sheet:#FFFFFF;--sheet2:#F6F9FC;--ink:#0B1F33;--ink2:#4A607A;--ink3:#8393A6;--line:#D3DEEA;--acc:#0A6CC4;--acc2:#00A3B4;--acc-soft:#E2EDF8;--acc-ink:#FFFFFF;--glow:#2179C944;--code-bg:#0D192D;--tab:#FAFBFDEE;--blue:#2071D2;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#09121F;--sheet:#111A29;--sheet2:#162234;--ink:#ECEFF5;--ink2:#94A5BD;--ink3:#637286;--line:#21354F;--acc:#3B89D0;--acc2:#00A3B4;--acc-soft:#182C44;--acc-ink:#FFFFFF;--glow:#367DBE88;--code-bg:#04080E;--tab:#0F1826EE;--blue:#3B86E3;--blue-soft:#172946}

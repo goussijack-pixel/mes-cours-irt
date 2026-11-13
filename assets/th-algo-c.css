@@ -1,0 +1,7 @@
+@font-face{font-family:'Fira Code';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/fira-code-vf.woff2) format('woff2')}
+@font-face{font-family:'Fira Sans';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/fira-sans-400.woff2) format('woff2')}
+@font-face{font-family:'Fira Sans';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/fira-sans-700.woff2) format('woff2')}
+@font-face{font-family:'Fira Code';font-style:normal;font-display:swap;font-weight:300 700;src:url(fonts/fira-code-vf.woff2) format('woff2')}
+:root{--f-t:'Fira Code','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Fira Sans',system-ui,sans-serif;--f-c:'Fira Code','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#ECF4FA;--sheet:#FFFFFF;--sheet2:#EBF2F9;--ink:#152230;--ink2:#4D6074;--ink3:#8594A3;--line:#CCDDEA;--acc:#337FA1;--acc2:#B28036;--acc-soft:#E7F0F4;--acc-ink:#FFFFFF;--glow:#468BAA44;--code-bg:#122031;--tab:#F9FCFEEE;--blue:#3273B8;--blue-soft:#E4EEFE}
+html[data-theme="dark"]{--paper:#06101E;--sheet:#0B1A2E;--sheet2:#10233D;--ink:#E3F2FF;--ink2:#8FB0CF;--ink3:#5F7891;--line:#1B3352;--acc:#4FC3F7;--acc2:#FFB74D;--acc-soft:#16354E;--acc-ink:#08090C;--glow:#48B1E188;--code-bg:#03070D;--tab:#0A1729EE;--blue:#45A2F6;--blue-soft:#12294A}

@@ -1,0 +1,8 @@
+@font-face{font-family:'Libre Baskerville';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/libre-baskerville-400.woff2) format('woff2')}
+@font-face{font-family:'Libre Baskerville';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/libre-baskerville-700.woff2) format('woff2')}
+@font-face{font-family:'Manrope';font-style:normal;font-display:swap;font-weight:200 800;src:url(fonts/manrope-vf.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-display:swap;font-weight:400;src:url(fonts/ibm-plex-mono-400.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-display:swap;font-weight:700;src:url(fonts/ibm-plex-mono-700.woff2) format('woff2')}
+:root{--f-t:'Libre Baskerville','Bricolage Grotesque',system-ui,sans-serif;--f-x:'Manrope',system-ui,sans-serif;--f-c:'IBM Plex Mono','JetBrains Mono',ui-monospace,monospace}
+html[data-theme="light"]{--paper:#F2ECDF;--sheet:#FFFCF4;--sheet2:#FAF5EA;--ink:#2A2016;--ink2:#6B5D4C;--ink3:#9A8F7F;--line:#DFD3BC;--acc:#0F766E;--acc2:#B91C1C;--acc-soft:#E2ECE4;--acc-ink:#FFFFFF;--glow:#26827944;--code-bg:#0D1A26;--tab:#FBF7EEEE;--blue:#2376A9;--blue-soft:#E4EBF4}
+html[data-theme="dark"]{--paper:#091219;--sheet:#111B24;--sheet2:#16232E;--ink:#ECEFF5;--ink2:#94A6B4;--ink3:#63727E;--line:#223642;--acc:#3F918B;--acc2:#C74949;--acc-soft:#182E34;--acc-ink:#FFFFFF;--glow:#3A848088;--code-bg:#04080B;--tab:#0F1821EE;--blue:#3D8AC0;--blue-soft:#172941}
