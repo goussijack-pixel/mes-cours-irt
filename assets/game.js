@@ -180,7 +180,8 @@ function applyImport(j) { var before = snapshot(); try { localStorage.setItem(BK
 function undoImport() { try { var o = JSON.parse(localStorage.getItem(BK)); Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); }); Object.keys(o).forEach(function (k) { localStorage.setItem(k, o[k]); }); localStorage.removeItem(BK); return true; } catch (e) { return false; } }
 function when(iso) { try { var d = new Date(iso); return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return "?"; } }
 function synMsg(t, bad) { var m = $("[data-synmsg]"); if (m) { m.textContent = t; m.style.color = bad ? "var(--red)" : "var(--green, #2bb673)"; } }
-function exportData() {
+function exportData() { try { saveFile(); } catch (e) { synMsg("Impossible de créer le fichier ici : utilise plutôt « Créer mon code ».", true); } }
+function saveFile() {
   var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([payload()], { type: "application/json" }));
   a.download = "progression-mes-cours-irt-" + today() + ".json"; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
