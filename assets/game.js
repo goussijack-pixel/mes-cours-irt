@@ -172,9 +172,11 @@ function readCode(code) { code = (code || "").replace(/\s+/g, "");
     if (code.indexOf("IRT1.") === 0) return new TextDecoder().decode(unb64(code.slice(5)));
     if (code.charAt(0) === "{") return code;
     throw new Error("format"); }).then(function (t) { var j = JSON.parse(t); if (!j || j.app !== "mes-cours-irt" || !j.data) throw new Error("format"); return j; }); }
-function applyImport(j) { try { localStorage.setItem(BK, JSON.stringify(snapshot())); } catch (e) {}
-  Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); });
-  Object.keys(j.data).forEach(function (k) { if (k.indexOf("rev:") === 0 && typeof j.data[k] === "string") localStorage.setItem(k, j.data[k]); }); }
+function replaceAll(o) { Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); });
+  Object.keys(o).forEach(function (k) { if (k.indexOf("rev:") === 0 && typeof o[k] === "string") localStorage.setItem(k, o[k]); }); }
+function applyImport(j) { var before = snapshot(); try { localStorage.setItem(BK, JSON.stringify(before)); } catch (e) {}
+  try { replaceAll(j.data); }
+  catch (e) { try { replaceAll(before); } catch (e2) {} throw new Error("stockage"); } }   // stockage plein : on remet l'ancienne progression
 function undoImport() { try { var o = JSON.parse(localStorage.getItem(BK)); Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); }); Object.keys(o).forEach(function (k) { localStorage.setItem(k, o[k]); }); localStorage.removeItem(BK); return true; } catch (e) { return false; } }
 function when(iso) { try { var d = new Date(iso); return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return "?"; } }
 function synMsg(t, bad) { var m = $("[data-synmsg]"); if (m) { m.textContent = t; m.style.color = bad ? "var(--red)" : "var(--green, #2bb673)"; } }
@@ -183,7 +185,7 @@ function exportData() {
   a.download = "progression-mes-cours-irt-" + today() + ".json"; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
 function importData(file, done) {
-  var r = new FileReader(); r.onload = function () { readCode(String(r.result).trim()).then(function (j) { applyImport(j); done(true); }, function () { done(false); }); };
+  var r = new FileReader(); r.onload = function () { readCode(String(r.result).trim()).then(function (j) { applyImport(j); done(true); }).catch(function () { done(false); }); };
   r.onerror = function () { done(false); }; r.readAsText(file);
 }
 function confirmImport(j) { var n = Object.keys(j.data).length; return confirm("Progression créée le " + when(j.at) + " sur ton " + (j.from || "autre appareil") + " (" + n + " éléments).\n\nElle va REMPLACER la progression de cet appareil. Une copie de secours est gardée : tu pourras annuler.\n\nContinuer ?"); }
@@ -212,7 +214,7 @@ document.addEventListener("click", function (e) {
   if (t.closest("[data-syncmake]")) { var mk = t.closest("[data-syncmake]"); mk.disabled = true; makeCode().then(function (c) { var o = $("[data-syncout]"); o.value = c; $("[data-synbox]").hidden = false; o.select(); var f = $("[data-synfo]"); if (f) f.textContent = "Code prêt (" + Math.ceil(c.length / 1024) + " Ko) : copie-le ou partage-le"; mk.disabled = false; sfx("ok"); }); return; }
   if (t.closest("[data-synccopy]")) { var o2 = $("[data-syncout]"); (navigator.clipboard ? navigator.clipboard.writeText(o2.value) : Promise.reject()).then(function () { synMsg("✓ Code copié. Colle-le dans un message à toi-même (WhatsApp, mail…)."); }, function () { o2.select(); try { document.execCommand("copy"); synMsg("✓ Code copié."); } catch (er) { synMsg("Sélectionne le code et copie-le à la main.", true); } }); return; }
   if (t.closest("[data-syncshare]")) { var c2 = $("[data-syncout]").value; if (navigator.share) navigator.share({ title: "Ma progression Mes Cours IRT", text: c2 }).catch(function () {}); else synMsg("Le partage direct n’existe pas ici : utilise « Copier ».", true); return; }
-  if (t.closest("[data-syncload]")) { var v = ($("[data-syncin]") || {}).value; if (!v || !v.trim()) { synMsg("Colle d’abord le code reçu dans la case.", true); return; } readCode(v).then(function (j) { if (!confirmImport(j)) return; applyImport(j); synMsg("✓ Progression reçue. Rechargement…"); setTimeout(function () { location.reload(); }, 700); }, function (er) { synMsg(er && er.message === "navigateur" ? "Ce navigateur est trop ancien pour lire ce code : envoie plutôt le fichier .json." : "Code incomplet ou invalide : vérifie qu’il a été copié en entier.", true); }); return; }
+  if (t.closest("[data-syncload]")) { var v = ($("[data-syncin]") || {}).value; if (!v || !v.trim()) { synMsg("Colle d’abord le code reçu dans la case.", true); return; } readCode(v).then(function (j) { if (!confirmImport(j)) return; applyImport(j); synMsg("✓ Progression reçue. Rechargement…"); setTimeout(function () { location.reload(); }, 700); }, function (er) { synMsg(er && er.message === "stockage" ? "Mémoire de l’appareil pleine : rien n’a été changé. Libère de la place puis réessaie." : er && er.message === "navigateur" ? "Ce navigateur est trop ancien pour lire ce code : envoie plutôt le fichier .json." : "Code incomplet ou invalide : vérifie qu’il a été copié en entier.", true); }); return; }
   if (t.closest("[data-syncundo]")) { if (confirm("Revenir à la progression d’avant la dernière réception ?") && undoImport()) location.reload(); return; }
   if (t.closest("[data-profil-edit]") && window.PROFIL) { PROFIL.onboard(function () { location.reload(); }, true); return; }
   var wp = t.closest("[data-wipe]"); if (wp) { if (wp.dataset.armed) { Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0 && k !== GK && k !== "rev:profil"; }).forEach(function (k) { localStorage.removeItem(k); }); location.reload(); } else { wp.dataset.armed = 1; wp.textContent = "Appuie encore pour tout effacer"; } return; }
