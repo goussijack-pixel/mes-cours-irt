@@ -137,14 +137,6 @@ function settingsHTML0(withCourse) {
     '<div class="setc"><h3>Sensations</h3><div class="set" style="padding:12px 0"><div class="lab">' + ic(P.snd ? "i-sound" : "i-mute") + "<span>Sons de jeu<small>Bonne réponse, mission, niveau</small></span></div>" + sw("snd", P.snd) + "</div>" +
     '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-vibrate") + "<span>Vibrations<small>Sur téléphone</small></span></div>" + sw("vib", P.vib) + "</div></div>" +
     '<div class="setc sync"><h3>Synchroniser mes appareils</h3><div data-autosync></div>' +
-    '<h4 class="synh4">Méthode manuelle (sans Internet entre les deux)</h4>' +
-    '<p class="synhint">Ta progression (cours, notes, moyenne, Auto-IA, profil) reste sur cet appareil. Pour la retrouver ailleurs : <b>1.</b> ici, touche « Créer mon code » ; <b>2.</b> envoie-le-toi (WhatsApp, mail…) ; <b>3.</b> sur l’autre appareil, colle-le dans « Recevoir ».</p>' +
-    '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-upload") + "<span>Envoyer cette progression<small data-synfo>Code texte compressé, à coller sur l’autre appareil</small></span></div><button class=\"btn sm\" data-syncmake>" + ic("i-copy") + "Créer mon code</button></div>" +
-    '<div class="synbox" data-synbox hidden><textarea readonly data-syncout rows="3"></textarea><div class="synrow"><button class="btn gh sm" data-synccopy>' + ic("i-copy") + 'Copier</button><button class="btn gh sm" data-syncshare>' + ic("i-upload") + 'Partager</button><button class="btn gh sm" data-export>' + ic("i-download") + 'Fichier .json</button></div></div>' +
-    '<div class="set" style="padding:12px 0 6px"><div class="lab">' + ic("i-download") + "<span>Recevoir une progression<small>Colle le code reçu, ou choisis le fichier .json</small></span></div><label class=\"btn gh sm\">" + ic("i-file") + 'Fichier<input type="file" accept="application/json,.json,.txt" data-import hidden></label></div>' +
-    '<textarea data-syncin rows="2" placeholder="Colle ici le code qui commence par IRT…"></textarea><button class="btn sm wide" data-syncload>' + ic("i-check") + 'Remplacer par ce code</button>' +
-    '<p class="synhint" data-synmsg></p>' +
-    (hasBackup() ? '<div class="set" style="padding:10px 0"><div class="lab">' + ic("i-retry") + "<span>Annuler la dernière réception<small>Revenir à la progression d’avant</small></span></div><button class=\"btn gh sm\" data-syncundo>" + ic("i-retry") + "Annuler</button></div>" : "") +
     '</div><div class="setc"><h3>Remise à zéro</h3>' +
     (withCourse ? '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-retry") + "<span>Remettre cette matière à zéro</span></div><button class=\"btn gh sm\" data-reset style=\"color:var(--red)\">" + ic("i-retry") + "Réinitialiser</button></div>" : "") +
     '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-trash") + "<span>Tout effacer<small>Progression, XP et badges de toutes les matières</small></span></div><button class=\"btn gh sm\" data-wipe style=\"color:var(--red)\">" + ic("i-trash") + "Tout effacer</button></div></div>" +
@@ -157,30 +149,6 @@ function applyP() {
   var b = $("[data-theme-btn]"); if (b) b.innerHTML = ic(t === "dark" ? "i-sun" : "i-moon");
   try { window.dispatchEvent(new Event("themechange")); } catch (e) {}
 }
-/* ---------- Synchronisation : tout ce qui commence par rev: (sauf la copie de secours) ---------- */
-var BK = "rev~backup";
-function hasBackup() { try { return !!localStorage.getItem(BK); } catch (e) { return false; } }
-function snapshot() { var o = {}; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf("rev:") === 0) o[k] = localStorage.getItem(k); } return o; }
-function payload() { return JSON.stringify({ app: "mes-cours-irt", v: 2, at: new Date().toISOString(), from: /Android|iPhone/i.test(navigator.userAgent) ? "téléphone" : "ordinateur", data: snapshot() }); }
-function b64(bytes) { var s = "", i; for (i = 0; i < bytes.length; i += 8192) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(s); }
-function unb64(t) { var s = atob(t), u = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u; }
-function pipe(bytes, Stream) { return new Response(new Blob([bytes]).stream().pipeThrough(new Stream("gzip"))).arrayBuffer().then(function (b) { return new Uint8Array(b); }); }
-function makeCode() { return Promise.resolve().then(function () { var raw = new TextEncoder().encode(payload());
-  if (window.CompressionStream) return pipe(raw, CompressionStream).then(function (z) { return "IRT2." + b64(z); }).catch(function () { return "IRT1." + b64(raw); });
-  return Promise.resolve("IRT1." + b64(raw)); }); }
-function readCode(code) { code = (code || "").replace(/\s+/g, "");
-  return Promise.resolve().then(function () {
-    if (code.indexOf("IRT2.") === 0) { if (!window.DecompressionStream) throw new Error("navigateur"); return pipe(unb64(code.slice(5)), DecompressionStream).then(function (u) { return new TextDecoder().decode(u); }); }
-    if (code.indexOf("IRT1.") === 0) return new TextDecoder().decode(unb64(code.slice(5)));
-    if (code.charAt(0) === "{") return code;
-    throw new Error("format"); }).then(function (t) { var j = JSON.parse(t); if (!j || j.app !== "mes-cours-irt" || !j.data) throw new Error("format"); return j; }); }
-function replaceAll(o) { Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); });
-  Object.keys(o).forEach(function (k) { if (k.indexOf("rev:") === 0 && typeof o[k] === "string") localStorage.setItem(k, o[k]); }); }
-function applyImport(j) { var before = snapshot(); try { localStorage.setItem(BK, JSON.stringify(before)); } catch (e) {}
-  try { replaceAll(j.data); }
-  catch (e) { try { replaceAll(before); } catch (e2) {} throw new Error("stockage"); } }   // stockage plein : on remet l'ancienne progression
-function undoImport() { try { var o = JSON.parse(localStorage.getItem(BK)); Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); }); Object.keys(o).forEach(function (k) { localStorage.setItem(k, o[k]); }); localStorage.removeItem(BK); return true; } catch (e) { return false; } }
-function when(iso) { try { var d = new Date(iso); return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return "?"; } }
 /* ---------- Synchronisation automatique (engine/sync.js) ---------- */
 function hm(t) { try { return new Date(t).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } }
 function paintAuto() {
@@ -196,18 +164,6 @@ function paintAuto() {
 }
 addEventListener("syncstate", paintAuto);
 function asMsg(t) { var m = $("[data-as-msg]"); if (m) { m.textContent = t; m.style.color = "var(--red)"; } }
-function synMsg(t, bad) { var m = $("[data-synmsg]"); if (m) { m.textContent = t; m.style.color = bad ? "var(--red)" : "var(--green, #2bb673)"; } }
-function exportData() { try { saveFile(); } catch (e) { synMsg("Impossible de créer le fichier ici : utilise plutôt « Créer mon code ».", true); } }
-function saveFile() {
-  var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([payload()], { type: "application/json" }));
-  a.download = "progression-mes-cours-irt-" + today() + ".json"; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-}
-function importData(file, done) {
-  var r = new FileReader(); r.onload = function () { readCode(String(r.result).trim()).then(function (j) { applyImport(j); done(true); }).catch(function () { done(false); }); };
-  r.onerror = function () { done(false); }; r.readAsText(file);
-}
-function confirmImport(j) { var n = Object.keys(j.data).length; return confirm("Progression créée le " + when(j.at) + " sur ton " + (j.from || "autre appareil") + " (" + n + " éléments).\n\nElle va REMPLACER la progression de cet appareil. Une copie de secours est gardée : tu pourras annuler.\n\nContinuer ?"); }
-
 /* ---------- Texte qui apparaît mot à mot, révélations, ripple, tilt ---------- */
 function split() { $$(".split:not([data-done])").forEach(function (el) { el.dataset.done = 1; var words = el.textContent.split(/(\s+)/); el.innerHTML = words.map(function (w, i) { return /^\s+$/.test(w) ? w : '<span class="w" style="animation-delay:' + (.15 + i * .04) + 's">' + esc(w) + "</span>"; }).join(""); }); }
 var rio = null;
@@ -228,21 +184,14 @@ document.addEventListener("click", function (e) {
   if (t.closest(".drawer a")) { drawer(false); }
   var s = t.closest("[data-set]"); if (s) { var n = s.dataset.set, v = s.dataset.val; if (n === "goal") { PL.goal = +v; saveJSON(PK, PL); } else { P[n] = v; saveJSON(GK, P); applyP(); } $$('[data-set="' + n + '"]').forEach(function (b) { b.setAttribute("aria-pressed", b === s); }); paintChrome(); sfx("tap"); return; }
   var w = t.closest("[data-sw]"); if (w) { var k = w.dataset.sw; P[k] = k === "motiv" ? P[k] === false : !P[k]; saveJSON(GK, P); w.setAttribute("aria-checked", P[k]); if (k === "snd" && P.snd) sfx("ok"); if (k === "vib") vib(30); return; }
-  if (t.closest("[data-export]")) { exportData(); return; }
   if (t.closest("[data-as-on]") && window.SYNC) { var ci = $("[data-as-code]"); var bt = t.closest("[data-as-on]"); bt.disabled = true; asMsg("Chiffrement du code…");
     SYNC.activer(ci ? ci.value : "").then(function () { location.reload(); }, function (er) { bt.disabled = false; asMsg(er && er.message ? er.message : "Activation impossible."); }); return; }
   if (t.closest("[data-as-now]") && window.SYNC) { SYNC.maintenant(); return; }
   if (t.closest("[data-as-off]") && window.SYNC) { if (confirm("Désactiver la synchronisation sur cet appareil ? Ta progression reste ici et dans le coffre.")) SYNC.desactiver(false).then(paintAuto); return; }
   if (t.closest("[data-as-change]") && window.SYNC) { if (confirm("Changer de code ? L’ancien coffre sera effacé et ta progression envoyée sous le nouveau code. Pense à entrer le nouveau code sur tes autres appareils.")) SYNC.desactiver(true).then(function () { SYNC.demander("Nouveau code", "Choisis ton nouveau code personnel (6 caractères ou plus).", function () { location.reload(); }); }); return; }
-  if (t.closest("[data-syncmake]")) { var mk = t.closest("[data-syncmake]"); mk.disabled = true; makeCode().then(function (c) { var o = $("[data-syncout]"); o.value = c; $("[data-synbox]").hidden = false; o.select(); var f = $("[data-synfo]"); if (f) f.textContent = "Code prêt (" + Math.ceil(c.length / 1024) + " Ko) : copie-le ou partage-le"; mk.disabled = false; sfx("ok"); }).catch(function () { mk.disabled = false; synMsg("Impossible de lire ta progression sur ce navigateur (stockage bloqué).", true); }); return; }
-  if (t.closest("[data-synccopy]")) { var o2 = $("[data-syncout]"); (navigator.clipboard ? navigator.clipboard.writeText(o2.value) : Promise.reject()).then(function () { synMsg("✓ Code copié. Colle-le dans un message à toi-même (WhatsApp, mail…)."); }, function () { o2.select(); try { document.execCommand("copy"); synMsg("✓ Code copié."); } catch (er) { synMsg("Sélectionne le code et copie-le à la main.", true); } }); return; }
-  if (t.closest("[data-syncshare]")) { var c2 = $("[data-syncout]").value; if (navigator.share) navigator.share({ title: "Ma progression Mes Cours IRT", text: c2 }).catch(function () {}); else synMsg("Le partage direct n’existe pas ici : utilise « Copier ».", true); return; }
-  if (t.closest("[data-syncload]")) { var v = ($("[data-syncin]") || {}).value; if (!v || !v.trim()) { synMsg("Colle d’abord le code reçu dans la case.", true); return; } readCode(v).then(function (j) { if (!confirmImport(j)) return; applyImport(j); synMsg("✓ Progression reçue. Rechargement…"); setTimeout(function () { location.reload(); }, 700); }, function (er) { synMsg(er && er.message === "stockage" ? "Mémoire de l’appareil pleine : rien n’a été changé. Libère de la place puis réessaie." : er && er.message === "navigateur" ? "Ce navigateur est trop ancien pour lire ce code : envoie plutôt le fichier .json." : "Code incomplet ou invalide : vérifie qu’il a été copié en entier.", true); }); return; }
-  if (t.closest("[data-syncundo]")) { if (confirm("Revenir à la progression d’avant la dernière réception ?") && undoImport()) location.reload(); return; }
   if (t.closest("[data-profil-edit]") && window.PROFIL) { PROFIL.onboard(function () { location.reload(); }, true); return; }
   var wp = t.closest("[data-wipe]"); if (wp) { if (wp.dataset.armed) { Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0 && k !== GK && k !== "rev:profil"; }).forEach(function (k) { localStorage.removeItem(k); }); location.reload(); } else { wp.dataset.armed = 1; wp.textContent = "Appuie encore pour tout effacer"; } return; }
 });
-document.addEventListener("change", function (e) { if (e.target.matches("[data-import]") && e.target.files[0]) { if (!confirm("Ce fichier va remplacer la progression de cet appareil (une copie de secours est gardée). Continuer ?")) { e.target.value = ""; return; } importData(e.target.files[0], function (ok) { if (ok) location.reload(); else alert("Fichier invalide : choisis un export de Mes Cours IRT."); }); } });
 document.addEventListener("input", function (e) { if (e.target.matches("[data-pname-in]")) { PL.name = e.target.value.trim().slice(0, 24); saveJSON(PK, PL); paintChrome(); } });
 document.addEventListener("keydown", function (e) { if (e.key === "Escape") { drawer(false); RQ = []; $$(".reward").forEach(function (x) { x.remove(); }); } });
 window.addEventListener("storage", function (e) { if (e.key === PK) { PL = loadJSON(PK, PL); paintChrome(); } if (e.key === GK) { P = loadJSON(GK, P); applyP(); } });
