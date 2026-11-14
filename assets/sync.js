@@ -123,7 +123,7 @@
   }
   function desactiver(effacerCoffre) {
     var p = effacerCoffre && conf && navigator.onLine ? rpc("coffre_effacer", { p_id: conf.id }).catch(function () {}) : Promise.resolve();
-    return p.then(function () { conf = null; etat.actif = false; try { quiet++; remI.call(S, K_CONF); } finally { quiet--; } dire("désactivée"); });
+    return p.then(function () { conf = null; etat.actif = false; try { quiet++; remI.call(S, K_CONF); } catch (e) {} finally { quiet--; } dire("désactivée"); });
   }
 
   /* ---- Petites interfaces : toast et fenêtre du 1er lancement ---- */
