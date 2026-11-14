@@ -645,3 +645,9 @@ html[data-motion="off"] .split .w,html[data-motion="off"] .rv2{opacity:1;transfo
 .pf-mini{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;flex:none;font-family:var(--f-t);font-weight:800;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2))}
 [data-theme-btn] svg.i,[data-themebtn] svg.i{transition:transform .5s cubic-bezier(.3,1.6,.5,1)}
 [data-theme-btn].spin svg.i,[data-themebtn].spin svg.i{transform:rotate(200deg) scale(.6)}
+
+/* Synchronisation */
+.setc.sync .synhint{font-size:.86em;color:var(--ink2);line-height:1.5;margin:4px 0 8px}
+.setc.sync textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:12px/1.4 ui-monospace,Consolas,monospace;padding:10px;resize:vertical;word-break:break-all}
+.setc.sync .synbox{margin:0 0 8px}.setc.sync .synrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.setc.sync .btn.wide{width:100%;justify-content:center;margin-top:8px}
