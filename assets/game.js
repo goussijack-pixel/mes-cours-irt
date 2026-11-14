@@ -124,7 +124,8 @@ function drawer(open) {
 /* ---------- Réglages ---------- */
 function seg(name, cur, opts) { return '<div class="seg">' + opts.map(function (o) { return '<button data-set="' + name + '" data-val="' + o[0] + '" aria-pressed="' + (String(cur) === String(o[0])) + '">' + o[1] + "</button>"; }).join("") + "</div>"; }
 function sw(name, on) { return '<button class="sw" role="switch" data-sw="' + name + '" aria-checked="' + !!on + '" aria-label="' + name + '"></button>'; }
-function settingsHTML(withCourse) {
+function settingsHTML() { setTimeout(paintAuto, 0); return settingsHTML0.apply(this, arguments); }
+function settingsHTML0(withCourse) {
   var pr = window.PROFIL && PROFIL.get();
   return '<div class="setc"><h3>Profil</h3>' + (pr ? '<div class="set" style="padding:12px 0"><div class="lab"><span class="pf-mini">' + esc(PROFIL.initials(pr)) + '</span><span>' + esc((pr.prenom || "") + " " + (pr.nom || "")) + '<small>' + esc([pr.classe, pr.option, pr.ecole].filter(Boolean).join(" · ")) + '</small></span></div><button class="btn gh sm" data-profil-edit>' + ic("i-pen") + 'Modifier</button></div>' : "") + '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-user") + '<span>Ton pseudo<small>Affiché sur ta carte de joueur</small></span></div><input class="inp" data-pname-in maxlength="24" placeholder="Ex. Leroi" value="' + esc(PL.name || "") + '"></div>' +
     '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-target") + "<span>Objectif quotidien<small>XP à gagner chaque jour</small></span></div>" + seg("goal", PL.goal, [[60, "Cool · 60"], [120, "Sérieux · 120"], [250, "Intense · 250"]]) + "</div></div>" +
@@ -135,7 +136,8 @@ function settingsHTML(withCourse) {
     '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-sparkle") + "<span>Messages de motivation<small>Une notification d’encouragement de temps en temps</small></span></div>" + sw("motiv", P.motiv !== false) + "</div></div>" +
     '<div class="setc"><h3>Sensations</h3><div class="set" style="padding:12px 0"><div class="lab">' + ic(P.snd ? "i-sound" : "i-mute") + "<span>Sons de jeu<small>Bonne réponse, mission, niveau</small></span></div>" + sw("snd", P.snd) + "</div>" +
     '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-vibrate") + "<span>Vibrations<small>Sur téléphone</small></span></div>" + sw("vib", P.vib) + "</div></div>" +
-    '<div class="setc sync"><h3>Synchroniser mes appareils</h3>' +
+    '<div class="setc sync"><h3>Synchroniser mes appareils</h3><div data-autosync></div>' +
+    '<h4 class="synh4">Méthode manuelle (sans Internet entre les deux)</h4>' +
     '<p class="synhint">Ta progression (cours, notes, moyenne, Auto-IA, profil) reste sur cet appareil. Pour la retrouver ailleurs : <b>1.</b> ici, touche « Créer mon code » ; <b>2.</b> envoie-le-toi (WhatsApp, mail…) ; <b>3.</b> sur l’autre appareil, colle-le dans « Recevoir ».</p>' +
     '<div class="set" style="padding:12px 0"><div class="lab">' + ic("i-upload") + "<span>Envoyer cette progression<small data-synfo>Code texte compressé, à coller sur l’autre appareil</small></span></div><button class=\"btn sm\" data-syncmake>" + ic("i-copy") + "Créer mon code</button></div>" +
     '<div class="synbox" data-synbox hidden><textarea readonly data-syncout rows="3"></textarea><div class="synrow"><button class="btn gh sm" data-synccopy>' + ic("i-copy") + 'Copier</button><button class="btn gh sm" data-syncshare>' + ic("i-upload") + 'Partager</button><button class="btn gh sm" data-export>' + ic("i-download") + 'Fichier .json</button></div></div>' +
@@ -179,6 +181,21 @@ function applyImport(j) { var before = snapshot(); try { localStorage.setItem(BK
   catch (e) { try { replaceAll(before); } catch (e2) {} throw new Error("stockage"); } }   // stockage plein : on remet l'ancienne progression
 function undoImport() { try { var o = JSON.parse(localStorage.getItem(BK)); Object.keys(localStorage).filter(function (k) { return k.indexOf("rev:") === 0; }).forEach(function (k) { localStorage.removeItem(k); }); Object.keys(o).forEach(function (k) { localStorage.setItem(k, o[k]); }); localStorage.removeItem(BK); return true; } catch (e) { return false; } }
 function when(iso) { try { var d = new Date(iso); return d.toLocaleDateString("fr-FR", { day: "numeric", month: "long" }) + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return "?"; } }
+/* ---------- Synchronisation automatique (engine/sync.js) ---------- */
+function hm(t) { try { return new Date(t).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } }
+function paintAuto() {
+  var X = window.SYNC; $$("[data-autosync]").forEach(function (box) {
+    if (!X) { box.innerHTML = ""; return; }
+    var e = X.etat;
+    box.innerHTML = e.actif
+      ? '<div class="asy on"><b>✓ Synchronisation automatique activée</b><small>' + esc(e.statut) + (e.derniere ? " · dernière synchro à " + hm(e.derniere) : "") + '</small>' +
+        '<div class="synrow"><button class="btn sm" data-as-now>' + ic("i-retry") + 'Synchroniser maintenant</button><button class="btn gh sm" data-as-change>' + ic("i-pen") + 'Changer de code</button><button class="btn gh sm" data-as-off style="color:var(--red)">Désactiver ici</button></div></div>'
+      : '<div class="asy"><b>Synchronisation automatique</b><small>Entre ton code personnel (6 caractères ou plus) sur chaque appareil : ta progression sera la même partout, mise à jour toute seule dès qu’il y a Internet. Le code ne quitte jamais l’appareil.</small>' +
+        '<input type="password" autocomplete="off" data-as-code placeholder="Ton code personnel"><button class="btn sm wide" data-as-on>' + ic("i-check") + 'Activer sur cet appareil</button><p class="synhint" data-as-msg></p></div>';
+  });
+}
+addEventListener("syncstate", paintAuto);
+function asMsg(t) { var m = $("[data-as-msg]"); if (m) { m.textContent = t; m.style.color = "var(--red)"; } }
 function synMsg(t, bad) { var m = $("[data-synmsg]"); if (m) { m.textContent = t; m.style.color = bad ? "var(--red)" : "var(--green, #2bb673)"; } }
 function exportData() { try { saveFile(); } catch (e) { synMsg("Impossible de créer le fichier ici : utilise plutôt « Créer mon code ».", true); } }
 function saveFile() {
@@ -212,6 +229,11 @@ document.addEventListener("click", function (e) {
   var s = t.closest("[data-set]"); if (s) { var n = s.dataset.set, v = s.dataset.val; if (n === "goal") { PL.goal = +v; saveJSON(PK, PL); } else { P[n] = v; saveJSON(GK, P); applyP(); } $$('[data-set="' + n + '"]').forEach(function (b) { b.setAttribute("aria-pressed", b === s); }); paintChrome(); sfx("tap"); return; }
   var w = t.closest("[data-sw]"); if (w) { var k = w.dataset.sw; P[k] = k === "motiv" ? P[k] === false : !P[k]; saveJSON(GK, P); w.setAttribute("aria-checked", P[k]); if (k === "snd" && P.snd) sfx("ok"); if (k === "vib") vib(30); return; }
   if (t.closest("[data-export]")) { exportData(); return; }
+  if (t.closest("[data-as-on]") && window.SYNC) { var ci = $("[data-as-code]"); var bt = t.closest("[data-as-on]"); bt.disabled = true; asMsg("Chiffrement du code…");
+    SYNC.activer(ci ? ci.value : "").then(function () { location.reload(); }, function (er) { bt.disabled = false; asMsg(er && er.message ? er.message : "Activation impossible."); }); return; }
+  if (t.closest("[data-as-now]") && window.SYNC) { SYNC.maintenant(); return; }
+  if (t.closest("[data-as-off]") && window.SYNC) { if (confirm("Désactiver la synchronisation sur cet appareil ? Ta progression reste ici et dans le coffre.")) SYNC.desactiver(false).then(paintAuto); return; }
+  if (t.closest("[data-as-change]") && window.SYNC) { if (confirm("Changer de code ? L’ancien coffre sera effacé et ta progression envoyée sous le nouveau code. Pense à entrer le nouveau code sur tes autres appareils.")) SYNC.desactiver(true).then(function () { SYNC.demander("Nouveau code", "Choisis ton nouveau code personnel (6 caractères ou plus).", function () { location.reload(); }); }); return; }
   if (t.closest("[data-syncmake]")) { var mk = t.closest("[data-syncmake]"); mk.disabled = true; makeCode().then(function (c) { var o = $("[data-syncout]"); o.value = c; $("[data-synbox]").hidden = false; o.select(); var f = $("[data-synfo]"); if (f) f.textContent = "Code prêt (" + Math.ceil(c.length / 1024) + " Ko) : copie-le ou partage-le"; mk.disabled = false; sfx("ok"); }).catch(function () { mk.disabled = false; synMsg("Impossible de lire ta progression sur ce navigateur (stockage bloqué).", true); }); return; }
   if (t.closest("[data-synccopy]")) { var o2 = $("[data-syncout]"); (navigator.clipboard ? navigator.clipboard.writeText(o2.value) : Promise.reject()).then(function () { synMsg("✓ Code copié. Colle-le dans un message à toi-même (WhatsApp, mail…)."); }, function () { o2.select(); try { document.execCommand("copy"); synMsg("✓ Code copié."); } catch (er) { synMsg("Sélectionne le code et copie-le à la main.", true); } }); return; }
   if (t.closest("[data-syncshare]")) { var c2 = $("[data-syncout]").value; if (navigator.share) navigator.share({ title: "Ma progression Mes Cours IRT", text: c2 }).catch(function () {}); else synMsg("Le partage direct n’existe pas ici : utilise « Copier ».", true); return; }
